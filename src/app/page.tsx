@@ -51,6 +51,7 @@ function YourMainContent({ themeColor }: { themeColor: string }) {
     },
   })
 
+
   //🪁 Generative UI: https://docs.copilotkit.ai/coagents/generative-ui
   useCopilotAction({
     name: "weatherTool",
