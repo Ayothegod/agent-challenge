@@ -3,12 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
-    "dev": "react-router dev",
-    "start": "react-router-serve ./build/server/index.js",
+    "build:ui": "react-router build",
+    "dev:ui": "react-router dev",
+    "start:ui": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
-    "dev:mastra": "mastra dev --dir mastra",
-    "build:mastra": "mastra build --dir mastra"
+    "dev:agent": "mastra dev --dir mastra",
+    "build:agent": "mastra build --dir mastra",
+    "start:agent": "mastra start",
+    "dev:debug": "LOG_LEVEL=debug npm run dev",
+    "build": "mastra build && react-router build",
+    "start": "concurrently \"npm:start:agent\" \"npm:start:ui\""
   },
   "dependencies": {
     "@mastra/client-js": "^0.16.1",
