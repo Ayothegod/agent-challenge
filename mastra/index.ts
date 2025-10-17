@@ -4,9 +4,11 @@ import { LibSQLStore } from "@mastra/libsql";
 
 import { weatherAgent } from "./agents/weather-agent";
 import { pbkdf2Sync } from "crypto";
+import { testAgent } from "./agents/test-agent";
+import { stockAgent } from "./agents/stockAgent";
 
 export const mastra = new Mastra({
-  agents: { weatherAgent },
+  agents: { weatherAgent, testAgent, stockAgent },
   // mcpServers: {
   //   server,
   // },

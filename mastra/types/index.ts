@@ -11,3 +11,10 @@ type Input = {
     type: "pdf" | "docs" | "text" | "email" | "slack" | "url";
   };
 };
+
+// - Uploader/UI
+// → IngestAgent 
+// → Node ETL Service
+// → chunk.created 
+// → Event Bus 
+// → Next agents

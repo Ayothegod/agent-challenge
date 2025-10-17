@@ -15,6 +15,7 @@
     "start": "concurrently \"npm:start:agent\" \"npm:start:ui\""
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.52",
     "@mastra/client-js": "^0.16.1",
     "@mastra/core": "^0.21.1",
     "@mastra/libsql": "^0.15.2",
