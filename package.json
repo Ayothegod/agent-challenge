@@ -6,15 +6,24 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "dev:mastra": "mastra dev --dir mastra",
+    "build:mastra": "mastra build --dir mastra"
   },
   "dependencies": {
+    "@mastra/client-js": "^0.16.1",
+    "@mastra/core": "^0.21.1",
+    "@mastra/libsql": "^0.15.2",
+    "@mastra/loggers": "^0.10.16",
+    "@mastra/memory": "^0.15.7",
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
     "isbot": "^5.1.31",
+    "mastra": "^0.17.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router": "^7.9.2"
+    "react-router": "^7.9.2",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@react-router/dev": "^7.9.2",
