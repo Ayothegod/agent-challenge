@@ -1,11 +1,10 @@
 import "dotenv/config";
-
 import { Agent } from "@mastra/core/agent";
 import { Memory } from "@mastra/memory";
 import { LibSQLStore } from "@mastra/libsql";
 import { weatherTool } from "../tools/weather-tool";
 import { createOllama } from "ollama-ai-provider-v2";
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
 
 export const ollama = createOllama({
   baseURL: process.env.NOS_OLLAMA_API_URL || process.env.OLLAMA_API_URL,
@@ -27,13 +26,12 @@ export const weatherAgent = new Agent({
 
       Use the weatherTool to fetch current weather data.
 `,
-  // model: 'openai/gpt-4o-mini',
   // model: ollama(
   //   process.env.NOS_MODEL_NAME_AT_ENDPOINT ||
   //     process.env.MODEL_NAME_AT_ENDPOINT ||
   //     "qwen3:8b"
   // ),
-  model: openai("gpt-4o"),
+  model: google("gemini-2.5-flash"),
   tools: { weatherTool },
   memory: new Memory({
     storage: new LibSQLStore({

@@ -14,7 +14,7 @@ export const stockAgent = new Agent({
       process.env.MODEL_NAME_AT_ENDPOINT ||
       "qwen3:8b"
   ),
-  // tools: { stockPrices: stockPrices },
+  tools: { stockPrices: stockPrices },
   // memory: new Memory({
   //   storage: new LibSQLStore({
   //     url: "file:../mastra.db", // path is relative to the .mastra/output directory

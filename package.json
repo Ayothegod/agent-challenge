@@ -15,6 +15,7 @@
     "start": "concurrently \"npm:start:agent\" \"npm:start:ui\""
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.23",
     "@ai-sdk/openai": "^2.0.52",
     "@mastra/client-js": "^0.16.1",
     "@mastra/core": "^0.21.1",
@@ -23,6 +24,7 @@
     "@mastra/memory": "^0.15.7",
     "@react-router/node": "^7.9.2",
     "@react-router/serve": "^7.9.2",
+    "dotenv": "^17.2.3",
     "isbot": "^5.1.31",
     "mastra": "^0.17.0",
     "ollama-ai-provider-v2": "^1.5.0",
