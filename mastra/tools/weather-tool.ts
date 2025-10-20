@@ -41,16 +41,7 @@ export const weatherTool = createTool({
     const weather = await getWeather(context.location);
     console.log({ weather });
 
-    return {
-      temperature: 20,
-      feelsLike: 19,
-      conditions: "not bad",
-      humidity: 20,
-      location: context.location,
-      windGust: 15,
-      windSpeed: 20,
-    };
-    // return await getWeather(context.location)
+    return await getWeather(context.location)
   },
 });
 
@@ -71,8 +62,6 @@ const getWeather = async (location: string) => {
 
   const response = await fetch(weatherUrl);
   const data = (await response.json()) as WeatherResponse;
-
-  console.log({ getWeather: data });
 
   return {
     temperature: data.current.temperature_2m,
