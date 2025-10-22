@@ -5,6 +5,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
+hello
 // --- constants ---
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 const NAMESPACE_REGEX = /^[a-zA-Z0-9._-]+$/;

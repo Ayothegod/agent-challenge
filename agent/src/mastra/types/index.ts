@@ -17,7 +17,7 @@ export interface UnifiedDoc {
     createdAt: string;
     author?: string;
     links?: Link[];
-    // [key: string]: any;
+    [key: string]: any;
   };
 }
 
@@ -42,6 +42,46 @@ export const UnifiedDocsSchema = z.array(
     }),
   })
 );
+
+export const SummarizedChunkSchema = z.object({
+  id: z.string(),
+  source: z.string(), // document name
+  summary: z.string(),
+  bullets: z.array(z.string()),
+  entities: z.array(z.string()),
+  canonicalTitle: z.string(),
+  tags: z.array(z.string()),
+  metadata: z.object({
+    author: z.string().optional().describe("Document author"),
+    createdAt: z.string().describe("Creation date"),
+    links: z.array(Link).optional(),
+  }), 
+});
+
+export const SummarizerInputSchema = z.object({
+  chunks: UnifiedDocsSchema,
+});
+
+export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
+
+// {
+//   "id": "pdf-1",
+//   "source": "pdf",
+//   "content": "Artificial intelligence is transforming healthcare by improving diagnosis accuracy and speeding up drug discovery.",
+//   "summary": "AI enhances diagnosis accuracy and accelerates drug discovery in healthcare.",
+//   "bullets": [
+//     "AI improves diagnostic precision",
+//     "Accelerates drug discovery"
+//   ],
+//   "entities": ["Artificial Intelligence", "Healthcare"],
+//   "canonicalTitle": "AI in Healthcare Transformation",
+//   "tags": ["AI", "Healthcare", "Innovation"],
+//   "metadata": { "page": 3, "author": "WHO Report" }
+// }
+
+
+
+
 
 // ```json
 // {

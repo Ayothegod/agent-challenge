@@ -1,10 +1,5 @@
-// import { httpStatus } from "../../shared/utils/constants.js";
 import { PDFParse } from "pdf-parse";
-import fs from "fs";
-import mammoth from "mammoth";
 import csvParser from "csv-parser";
-import path from "path";
-import { fileURLToPath } from "url";
 import { Readable } from "stream";
 import { ApiError } from "../../util/services";
 // const __filename = fileURLToPath(import.meta.url);
