@@ -22,7 +22,11 @@
     "@mastra/libsql": "^0.15.2",
     "@mastra/loggers": "^0.10.16",
     "@mastra/memory": "^0.15.7",
+    "csv-parser": "^3.2.0",
     "hono": "^4.10.2",
+    "mammoth": "^1.11.0",
+    "pdf-parse": "^2.4.5",
+    "uuid": "^13.0.0",
     "zod": "^4.1.12"
   }
 }
