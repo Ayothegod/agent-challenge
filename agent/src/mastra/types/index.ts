@@ -59,6 +59,8 @@ export const SummarizedChunkSchema = z.object({
   canonicalTitle: z.string(),
   tags: z.array(z.string()),
   metadata: z.object({
+    page: z.number().describe("Document page number (for PDF)"),
+    row: z.number().describe("CSV row number"),
     author: z.string().optional().describe("Document author"),
     createdAt: z.string().describe("Creation date"),
     links: z.array(Link).optional(),
@@ -69,22 +71,9 @@ export const SummarizerInputSchema = z.object({
   chunks: UnifiedDocsSchema,
 });
 
-export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
+export type SummarizedChunk = z.infer<typeof SummarizedChunkSchema>;
 
-// {
-//   "id": "pdf-1",
-//   "source": "pdf",
-//   "content": "Artificial intelligence is transforming healthcare by improving diagnosis accuracy and speeding up drug discovery.",
-//   "summary": "AI enhances diagnosis accuracy and accelerates drug discovery in healthcare.",
-//   "bullets": [
-//     "AI improves diagnostic precision",
-//     "Accelerates drug discovery"
-//   ],
-//   "entities": ["Artificial Intelligence", "Healthcare"],
-//   "canonicalTitle": "AI in Healthcare Transformation",
-//   "tags": ["AI", "Healthcare", "Innovation"],
-//   "metadata": { "page": 3, "author": "WHO Report" }
-// }
+export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
 
 // ```json
 // {
