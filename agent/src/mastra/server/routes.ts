@@ -1,11 +1,5 @@
-// src/mastra/server/routes.ts
-
 import { ingestSourcesHandler } from "./routes/ingest";
 
-// import { ingestSourcesHandler } from './routes/ingest';
-// import { searchDocsHandler } from './routes/searchDocs';
-
-// Optional, handy for quick checks in browser or health probes
 const rootRoute = {
   method: 'GET',
   path: '/api/get',

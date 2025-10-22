@@ -8,12 +8,12 @@ interface UnifiedDoc {
   title: string; // filename or document title
   content: string; // plain text
   metadata: {
-    page?: number; // for pdf
-    row?: number; // for csv
+    page: number; // for pdf
+    row: number; // for csv
+    createdAt: string;
     author?: string;
-    createdAt?: string;
     links?: Link[];
-    [key: string]: any;
+    // [key: string]: any;
   };
 }
 

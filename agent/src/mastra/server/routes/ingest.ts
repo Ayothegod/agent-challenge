@@ -4,10 +4,15 @@ import { safeErrorMessage } from "../util/safeErrorMessage";
 import { Context } from "hono";
 import { ApiError, ApiResponse } from "../util/services";
 import { connectors } from "../module/ingest/transform";
+import { ingestTool } from "../../tools/ingest-tool";
+import { UnifiedDoc } from "../../types";
+import { RuntimeContext } from "@mastra/core/runtime-context";
 
 interface Source {
   source: "pdf" | "docx" | "csv"; // "email" | "notion" | "drive"
 }
+
+const runtimeContext = new RuntimeContext();
 
 export const ingestSourcesHandler = async (c: Context) => {
   try {
@@ -39,17 +44,16 @@ export const ingestSourcesHandler = async (c: Context) => {
         404
       );
 
-    const result = await connector(file);
+    const result = (await connector(file)) as UnifiedDoc[];
 
-    // const { ingestSources } = await import('../../tools/ingest-sources');
-    // const result = await ingestSources.execute({
-    //   context: { sources, files, namespace, allowInsecureTLS },
-    // });
+    const toolResult = await ingestTool.execute({
+      context: result,
+      runtimeContext,
+    });
 
-    return c.json(
-      { msg: "workflow.extract.completed", result },
-      400
-    );
+    console.log({ toolResult });
+
+    return c.json({ msg: "workflow.extract.completed", result }, 200);
   } catch (err) {
     return c.json({ error: safeErrorMessage(err) }, 500);
   }

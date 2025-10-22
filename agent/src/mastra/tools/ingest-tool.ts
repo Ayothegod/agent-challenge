@@ -6,14 +6,16 @@ export const ingestTool = createTool({
   id: "ingest-tool",
   description: "Get Unified docs from API and send to other tools.",
   // "Get input data, clean the data, tranform the data and return structured chunks.",
-  inputSchema: z.object({
-    input: UnifiedDocsSchema,
-  }),
+  inputSchema: UnifiedDocsSchema,
   outputSchema: UnifiedDocsSchema,
+  // inputSchema: z.object({
+    // msg: z.string(),
+  // }),
+  // outputSchema: z.string(),
   execute: async ({ context }) => {
-    console.log(context);
+    console.log({context});
 
-    return context.input
+    return context
   },
 });
 

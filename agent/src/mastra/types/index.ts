@@ -5,19 +5,19 @@ export interface Link {
   url: string;
 }
 
-interface UnifiedDoc {
+export interface UnifiedDoc {
   id: string;
   source: string; // "csv" | "pdf" | "docx"
   fileName: string;
   title: string; // filename or document title
   content: string; // plain text
   metadata: {
-    page?: number; // for pdf
-    row?: number; // for csv
+    page: number; // for pdf
+    row: number; // for csv
+    createdAt: string;
     author?: string;
-    createdAt?: string;
     links?: Link[];
-    [key: string]: any;
+    // [key: string]: any;
   };
 }
 
@@ -34,8 +34,8 @@ export const UnifiedDocsSchema = z.array(
     title: z.string().describe("Chunk title"), // filename or document title
     content: z.string().describe("Chunk content"), // plain text
     metadata: z.object({
-      page: z.number().optional().describe("Document page number (for PDF)"),
-      row: z.number().optional().describe("CSV row number"),
+      page: z.number().describe("Document page number (for PDF)"),
+      row: z.number().describe("CSV row number"),
       author: z.string().optional().describe("Document author"),
       createdAt: z.string().describe("Creation date"),
       links: z.array(Link).optional(),
