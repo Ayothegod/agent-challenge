@@ -8,14 +8,11 @@ export const ingestTool = createTool({
   inputSchema: UnifiedDocsSchema,
   outputSchema: UnifiedDocsSchema,
   execute: async ({ context }) => {
-    console.log({ context });
 
-    const commitsRes = await summarizerTool.execute({
+    const summarizerResponse = await summarizerTool.execute({
       context: { chunks: context },
       runtimeContext: {} as any,
     });
-
-    console.log({ commitsRes });
 
     return context;
   },
