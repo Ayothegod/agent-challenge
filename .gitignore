@@ -3,6 +3,7 @@
 .react-router/
 .mastra/
 BUILD.MD
+test/
 
 # dependencies
 node_modules

@@ -1,0 +1,22 @@
+{
+  "name": "synapse",
+  "version": "1.0.0",
+  "description": "Synapse is a distributed knowledge system powered by cognitive agents that continuously learn, organize, and retrieve your team’s information — turning static data into evolving intelligence.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev:ui": "pnpm --filter client run dev",
+    "dev:agent": "pnpm --filter server run dev",
+    "dev:single": "pnpm -r run dev",
+    "build:ui": "pnpm --filter client run build",
+    "build:agent": "pnpm --filter server run build",
+    "build": "pnpm --filter server run build",
+    "real:build": "pnpm -r run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
