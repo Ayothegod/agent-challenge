@@ -22,6 +22,7 @@
     "@mastra/libsql": "^0.15.2",
     "@mastra/loggers": "^0.10.16",
     "@mastra/memory": "^0.15.7",
+    "hono": "^4.10.2",
     "zod": "^4.1.12"
   }
 }

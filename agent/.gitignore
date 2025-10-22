@@ -6,3 +6,6 @@ node_modules
 
 logs
 .mastra
+
+tools/ingest-sources
+tools/docs-retriever
