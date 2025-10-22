@@ -1,6 +1,8 @@
+# ENVs
+.env
+
 # Node_modules
 node_modules
 
 logs
-BUILD.MD
-test/
+.mastra

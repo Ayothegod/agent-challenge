@@ -6,11 +6,11 @@
   "private": true,
   "scripts": {
     "dev:ui": "pnpm --filter client run dev",
-    "dev:agent": "pnpm --filter server run dev",
+    "dev:agent": "pnpm --filter agent run dev",
     "dev:single": "pnpm -r run dev",
     "build:ui": "pnpm --filter client run build",
-    "build:agent": "pnpm --filter server run build",
-    "build": "pnpm --filter server run build",
+    "build:agent": "pnpm --filter agent run build",
+    "build": "pnpm --filter agent run build",
     "real:build": "pnpm -r run build"
   },
   "keywords": [],
