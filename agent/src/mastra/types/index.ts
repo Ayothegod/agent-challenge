@@ -21,6 +21,14 @@ export interface UnifiedDoc {
   };
 }
 
+export interface ParsedText {
+  summary: string;
+  bullets: string[];
+  entities: string[];
+  canonicalTitle: string;
+  tags: string[];
+}
+
 export const Link = z.object({
   text: z.string().describe("Link name"),
   url: z.url().describe("Link url"),
@@ -45,7 +53,6 @@ export const UnifiedDocsSchema = z.array(
 
 export const SummarizedChunkSchema = z.object({
   id: z.string(),
-  source: z.string(), // document name
   summary: z.string(),
   bullets: z.array(z.string()),
   entities: z.array(z.string()),
@@ -55,7 +62,7 @@ export const SummarizedChunkSchema = z.object({
     author: z.string().optional().describe("Document author"),
     createdAt: z.string().describe("Creation date"),
     links: z.array(Link).optional(),
-  }), 
+  }),
 });
 
 export const SummarizerInputSchema = z.object({
@@ -78,10 +85,6 @@ export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
 //   "tags": ["AI", "Healthcare", "Innovation"],
 //   "metadata": { "page": 3, "author": "WHO Report" }
 // }
-
-
-
-
 
 // ```json
 // {

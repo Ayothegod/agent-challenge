@@ -1,64 +1,84 @@
 import { createTool } from "@mastra/core/tools";
-import {
-  SummarizerInputSchema,
-  SummarizerOutputSchema,
-} from "../types/index";
+import { SummarizerInputSchema, SummarizerOutputSchema, ParsedText } from "../types/index";
 import z from "zod";
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
+const model = google("gemini-2.0-flash");
 
 export const summarizerTool = createTool({
   id: "summarizer-tool",
   description:
     "Summarizes and enriches document chunks with bullet points, entities, and tags.",
   inputSchema: SummarizerInputSchema,
-  // outputSchema: SummarizerOutputSchema,
-  outputSchema: z.string(),
+  outputSchema: SummarizerOutputSchema,
+  // outputSchema: z.string(),
   execute: async ({ context, runtimeContext }) => {
     const { chunks } = context;
-
     console.log("this is summarizer tool");
-    
 
-    // const results = [];
+    const results = [];
+    for await (const chunk of chunks) {
+      const title = chunk.title;
+      const content = chunk.content;
+      const source = chunk.source;
 
-    // for (const chunk of chunks) {
-    //   const chunkPrompt = `
-    //   Summarize and enrich document chunks.
-    //   For each chunk provided, generate:
+      const chunkPrompt = `
+You are a summarization AI.
 
-    //   A concise 2–4 line summary of the chunk content "${chunk.content}" in respect to the chunk title
-    //   3–7 key bullet points summarizing important details.
-    //   Named entities (people, organizations, places, topics) that are present in the chunk only.
-    //   A short canonical title describing the chunk’s main idea.
-    //   3–5 topic or keyword tags.
-      
-    //   Return a JSON object with:
-    // {
-    //   "summary": "2-4 line summary",
-    //   "bullets": ["point1", "point2", ...],
-    //   "entities": ["entity1", "entity2", ...],
-    //   "canonicalTitle": "short descriptive title",
-    //   "tags": ["tag1", "tag2", ...]
-    // }
-    //       `;
+Summarize the following chunk:
 
-    //   const model = google("gemini-2.5-flash");
-    //   const result = await generateText({
-    //     model,
-    //     messages: [{ role: "user", content: chunkPrompt }],
-    //   });
+Title: ${title}
+Content: ${content}
+Source: ${source}
 
-    //   const chunkSummary = result.text?.trim() ?? "";
-    //   console.log({ result });
 
-    //   // results.push({
-    //   //   id: chunk.id,
-    //   //   ...aiResponse,
-    //   //   metadata: chunk.metadata,
-    //   // });
-    // }
+Instructions:
+- Generate a concise 2–4 line summary.
+- Extract 2–4 key bullet points.
+- Identify named entities (people, organizations, places, topics) present in the chunk.
+- Suggest a short canonical title for the chunk.
+- Provide 3–5 relevant topic or keyword tags.
 
-    return "results";
+Return a **strict JSON** object with this structure:
+
+{
+  "summary": "...",
+  "bullets": ["...", "..."],
+  "entities": ["...", "..."],
+  "canonicalTitle": "...",
+  "tags": ["...", "..."]
+}
+
+Do not add any explanations outside the JSON.
+`;
+
+      const result = await generateText({
+        model,
+        messages: [
+          {
+            role: "user",
+            content: chunkPrompt,
+          },
+        ],
+      });
+
+      const chunkSummary = result.text?.trim() ?? "";
+      const cleanText = chunkSummary.replace(/```json|```/g, "").trim();
+      const parsedText: ParsedText = JSON.parse(cleanText);
+
+      results.push({
+        id: chunk.id,
+        summary: parsedText.summary ?? "",
+        bullets: parsedText.bullets ?? [],
+        entities: parsedText.entities ?? [],
+        canonicalTitle: parsedText.canonicalTitle ?? "",
+        tags: parsedText.tags ?? [],
+        metadata: chunk.metadata,
+      });
+    }
+
+    console.log({ results });
+
+    return results
   },
 });
