@@ -1,10 +1,7 @@
-import { RuntimeContext } from "@mastra/core/runtime-context";
 import { Context } from "hono";
-import { safeErrorMessage } from "../util/safeErrorMessage";
-import { indexerTool } from "../../tools/indexer-tool";
 import { summarizerTool } from "../../tools/summarizer";
+import { safeErrorMessage } from "../util/safeErrorMessage";
 
-const runtimeContext = new RuntimeContext();
 
 export const summarizerHandler = async (c: Context) => {
   try {
@@ -16,8 +13,8 @@ export const summarizerHandler = async (c: Context) => {
     });
 
     return c.json(
-      { msg: "workflow.indexer.completed",  summarizerResponse},
-      201
+      { msg: "workflow.summarizer.completed",  summarizerResponse},
+      200
     );
   } catch (err) {
     return c.json({ error: safeErrorMessage(err) }, 500);

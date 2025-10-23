@@ -6,6 +6,8 @@ import { MongoDBVector } from "@mastra/mongodb";
 import { embedMany } from "ai";
 import { google } from "@ai-sdk/google";
 import { ContentEmbedding, GoogleGenAI } from "@google/genai";
+import { ApiError } from "../server/util/services";
+import { prisma } from "../server/util/prisma";
 
 const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
@@ -28,53 +30,89 @@ export const indexerTool = createTool({
     errors: z.array(z.string()),
   }),
   execute: async ({ context }) => {
+    const indexName = "chunkSummary";
+    const dimension = 768;
     const chunks = context;
-    const results = [];
-    const errors: string[] = [];
 
-    // await store.createIndex({
-    //   indexName: "myCollection",
-    //   dimension: 1536,
-    // });
-    // await store.upsert({
-    //   indexName: "myCollection",
-    //   vectors: embeddings,
-    //   metadata: chunks.map(chunk => ({ text: chunk.text })),
-    // });
-    // const contents = [
-    //   "What is the meaning of life?",
-    //   "What is the purpose of existence?",
-    //   "How do I bake a cake?",
-    // ];
+    const chunkTexts: string[] = chunks.map((c) => c.summary);
 
     // const response = await ai.models.embedContent({
     //   model: "gemini-embedding-001",
-    //   contents,
+    //   contents: chunkTexts,
     //   config: {
-    //     outputDimensionality: 768,
+    //     outputDimensionality: dimension,
     //   },
     // });
 
-    // console.log(response.metadata);
     // const embeddings = response.embeddings as ContentEmbedding[];
+    // const vectors = embeddings.map((e) => e.values!);
 
-    // // Match embeddings to original text:
-    // contents.forEach((text, i) => {
-    //   console.log(text, embeddings[i].values);
+    const indexes = await store.listIndexes();
+    const singleIndex = indexes.find((i) => i === indexName);
+    console.log(singleIndex);
+
+    // await store.createIndex({
+    //   indexName: "chunkSummary",
+    //   dimension: 768,
     // });
+    // Skip already stored ID's
+    // const existingIds =
+    //   (await store.queryIds?.(
+    //     indexName,
+    //     chunks.map((c) => c.id)
+    //   )) ?? [];
+    // const newChunks = chunks.filter((c) => !existingIds.includes(c.id));
 
-    const chunkTexts: string[] = [];
-    for (const chunk of chunks) {
-      chunkTexts.push(chunk.summary);
-    }
-    console.log(chunkTexts);
-    
+    // try {
+    //   const upsert = await store.upsert({
+    //     indexName: "chunkSummary",
+    //     vectors,
+    //     metadata: chunks.map((chunk) => ({
+    //       id: chunk.id,
+    //       summary: chunk.summary,
+    //       tags: chunk.tags,
+    //       bullets: chunk.bullets,
+    //       title: chunk.canonicalTitle,
+    //     })),
+    //   });
+    // } catch (error) {
+    //   console.log("Error occured", error);
+    // }
+
+    // const ops = chunks.map((chunk, i) =>
+    //   store.upsert({
+    //     indexName,
+    //     vectors: [vectors[i]],
+    //     metadata: [
+    //       {
+    //         id: chunk.id,
+    //         summary: chunk.summary,
+    //         tags: chunk.tags,
+    //         bullets: chunk.bullets,
+    //         title: chunk.canonicalTitle,
+    //       },
+    //     ],
+    //   })
+    // );
+
+    // const results = await Promise.allSettled(ops);
+    // const indexed = results.filter((r) => r.status === "fulfilled").length;
+    // const errors = results
+    //   .filter((r) => r.status === "rejected")
+    //   .map((r) => r.reason);
+
+    // return {
+    //   status: "success",
+    //   indexed,
+    //   skipped: errors.length,
+    //   errors,
+    // };
 
     return {
-      status: errors.length ? "partial" : "success",
-      indexed: results.length,
-      skipped: errors.length,
-      errors,
+      status: "success",
+      indexed: 2,
+      skipped: 2,
+      errors: [],
     };
   },
 });

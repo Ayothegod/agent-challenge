@@ -15,10 +15,31 @@ export const indexerHandler = async (c: Context) => {
       runtimeContext,
     });
 
-    console.log({ toolResult });
+    // console.log(toolResult);
 
-    return c.json({ msg: "workflow.indexer.completed" }, 201);
+    return c.json({ msg: "workflow.indexer.completed", toolResult}, 201);
   } catch (err) {
     return c.json({ error: safeErrorMessage(err) }, 500);
   }
 };
+
+
+      // await prisma.indexedChunks.upsert({
+      //   where: { id: chunk.id },
+      //   update: {
+      //     canonicalTitle: chunk.canonicalTitle,
+      //     tags: chunk.tags,
+      //     entities: chunk.entities,
+      //     summary: chunk.summary,
+      //     source: chunk.source,
+      //   },
+      //   create: {
+      //     id: chunk.id,
+      //     canonicalTitle: chunk.canonicalTitle,
+      //     tags: chunk.tags,
+      //     entities: chunk.entities,
+      //     summary: chunk.summary,
+      //     source: chunk.source,
+      //   },
+      // });
+      // errors.length ? "partial" : "success"
