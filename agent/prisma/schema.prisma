@@ -7,20 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model SummarizedChunk {
-  // MongoDB ObjectId is represented as a string in Prisma
-  id             String   @id @map("_id") @default(auto()) @db.ObjectId
-
+model indexedChunk {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  chunkId        String   @unique
   summary        String
   bullets        String[]
   entities       String[]
   canonicalTitle String
   tags           String[]
-  // metadata can contain page, row, author, createdAt, links, etc.
   metadata       Json
-
-  // optional extra fields used elsewhere in the code (optional)
   source         String?
 
-  @@index([canonicalTitle])
+  @@index([canonicalTitle, chunkId])
 }

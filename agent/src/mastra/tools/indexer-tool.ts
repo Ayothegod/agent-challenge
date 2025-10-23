@@ -3,10 +3,7 @@ import { SummarizerOutputSchema, UnifiedDocsSchema } from "../types/index";
 import { summarizerTool } from "./summarizer";
 import z from "zod";
 import { MongoDBVector } from "@mastra/mongodb";
-import { embedMany } from "ai";
-import { google } from "@ai-sdk/google";
 import { ContentEmbedding, GoogleGenAI } from "@google/genai";
-import { ApiError } from "../server/util/services";
 import { prisma } from "../server/util/prisma";
 
 const ai = new GoogleGenAI({
@@ -23,96 +20,84 @@ export const indexerTool = createTool({
   description:
     "Generate embeddings for enriched chunks and store in vector DB + Postgres.",
   inputSchema: SummarizerOutputSchema,
-  outputSchema: z.object({
-    status: z.string(),
-    indexed: z.number(),
-    skipped: z.number(),
-    errors: z.array(z.string()),
-  }),
+  outputSchema: z.union([
+    z.object({
+      status: z.string(),
+      indexed: z.number(),
+      skipped: z.number(),
+      errors: z.array(z.string()),
+    }),
+    z.object({ msg: z.string().describe("No chunk available output") }),
+  ]),
   execute: async ({ context }) => {
     const indexName = "chunkSummary";
     const dimension = 768;
     const chunks = context;
 
-    const chunkTexts: string[] = chunks.map((c) => c.summary);
+    if (!chunks)
+      return { msg: "No chunks available, please input chunk data." };
 
-    // const response = await ai.models.embedContent({
-    //   model: "gemini-embedding-001",
-    //   contents: chunkTexts,
-    //   config: {
-    //     outputDimensionality: dimension,
-    //   },
-    // });
+    const existing = await prisma.indexedChunk.findMany({
+      where: { chunkId: { in: chunks.map((c) => c.id) } },
+      select: { chunkId: true },
+    });
+    const existingIds = new Set(existing.map((e) => e.chunkId));
+    const newChunks = chunks.filter((c) => !existingIds.has(c.id));
+    console.log({ existing, existingIds, newChunks });
 
-    // const embeddings = response.embeddings as ContentEmbedding[];
-    // const vectors = embeddings.map((e) => e.values!);
+    if (newChunks.length < 1)
+      return { msg: "The current chunks are already indexed." };
 
-    const indexes = await store.listIndexes();
-    const singleIndex = indexes.find((i) => i === indexName);
-    console.log(singleIndex);
+    const response = await ai.models.embedContent({
+      model: "gemini-embedding-001",
+      contents: newChunks.map((c) => c.summary),
+      config: {
+        outputDimensionality: dimension,
+      },
+    });
 
-    // await store.createIndex({
-    //   indexName: "chunkSummary",
-    //   dimension: 768,
-    // });
-    // Skip already stored ID's
-    // const existingIds =
-    //   (await store.queryIds?.(
-    //     indexName,
-    //     chunks.map((c) => c.id)
-    //   )) ?? [];
-    // const newChunks = chunks.filter((c) => !existingIds.includes(c.id));
+    const embeddings = response.embeddings as ContentEmbedding[];
+    const vectors = embeddings.map((e) => e.values!);
 
-    // try {
-    //   const upsert = await store.upsert({
-    //     indexName: "chunkSummary",
-    //     vectors,
-    //     metadata: chunks.map((chunk) => ({
-    //       id: chunk.id,
-    //       summary: chunk.summary,
-    //       tags: chunk.tags,
-    //       bullets: chunk.bullets,
-    //       title: chunk.canonicalTitle,
-    //     })),
-    //   });
-    // } catch (error) {
-    //   console.log("Error occured", error);
-    // }
+    await store.createIndex({ indexName, dimension });
 
-    // const ops = chunks.map((chunk, i) =>
-    //   store.upsert({
-    //     indexName,
-    //     vectors: [vectors[i]],
-    //     metadata: [
-    //       {
-    //         id: chunk.id,
-    //         summary: chunk.summary,
-    //         tags: chunk.tags,
-    //         bullets: chunk.bullets,
-    //         title: chunk.canonicalTitle,
-    //       },
-    //     ],
-    //   })
-    // );
-
-    // const results = await Promise.allSettled(ops);
-    // const indexed = results.filter((r) => r.status === "fulfilled").length;
-    // const errors = results
-    //   .filter((r) => r.status === "rejected")
-    //   .map((r) => r.reason);
-
-    // return {
-    //   status: "success",
-    //   indexed,
-    //   skipped: errors.length,
-    //   errors,
-    // };
+    const ops = newChunks.map((chunk, i) =>
+      Promise.all([
+        store.upsert({
+          indexName: "chunkSummary",
+          vectors: [vectors[i]],
+          metadata: [
+            {
+              id: chunk.id,
+              summary: chunk.summary,
+              bullets: chunk.bullets,
+              title: chunk.canonicalTitle,
+            },
+          ],
+        }),
+        prisma.indexedChunk.create({
+          data: {
+            chunkId: chunk.id,
+            canonicalTitle: chunk.canonicalTitle,
+            tags: chunk.tags,
+            entities: chunk.entities,
+            summary: chunk.summary,
+            metadata: JSON.stringify(chunk.metadata),
+          },
+        }),
+      ])
+    );
+    const results = await Promise.allSettled(ops);
+    const indexed = results.filter((r) => r.status === "fulfilled").length;
+    const errors = results
+      .filter((r) => r.status === "rejected")
+      .map((r) => String(r.reason));
 
     return {
-      status: "success",
-      indexed: 2,
-      skipped: 2,
-      errors: [],
+      status: errors.length ? "partial" : "success",
+      indexed,
+      skipped: errors.length,
+      errors,
     };
   },
 });
