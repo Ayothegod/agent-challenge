@@ -2,30 +2,26 @@ import { createTool } from "@mastra/core/tools";
 import { SummarizerOutputSchema, UnifiedDocsSchema } from "../types/index";
 import { summarizerTool } from "./summarizer";
 import z from "zod";
+import { MongoDBVector } from "@mastra/mongodb";
+import { embedMany } from "ai";
+import { google } from "@ai-sdk/google";
+import { ContentEmbedding, GoogleGenAI } from "@google/genai";
 
-import { MongoDBVector } from '@mastra/mongodb'
- 
-// const store = new MongoDBVector({
-//   uri: process.env.MONGODB_URI as string,
-//   dbName: process.env.MONGODB_DATABASE as string
-// })
-// await store.createIndex({
-//   indexName: "myCollection",
-//   dimension: 1536,
-// });
-// await store.upsert({
-//   indexName: "myCollection",
-//   vectors: embeddings,
-//   metadata: chunks.map(chunk => ({ text: chunk.text })),
-// });
+const ai = new GoogleGenAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+});
+
+const store = new MongoDBVector({
+  uri: process.env.MONGODB_URI as string,
+  dbName: process.env.MONGODB_DATABASE as string,
+});
 
 export const indexerTool = createTool({
   id: "indexer-tool",
   description:
     "Generate embeddings for enriched chunks and store in vector DB + Postgres.",
   inputSchema: SummarizerOutputSchema,
-  // outputSchema: SummarizerOutputSchema,
-    outputSchema: z.object({
+  outputSchema: z.object({
     status: z.string(),
     indexed: z.number(),
     skipped: z.number(),
@@ -36,76 +32,43 @@ export const indexerTool = createTool({
     const results = [];
     const errors: string[] = [];
 
-//     (const chunk of chunks) {
-//       try {
-//       //         let textToEmbed = summarizedChunk.summary;
-//       // if (!textToEmbed) textToEmbed = summarizedChunk.canonicalTitle;
-//       // embedSummaryTexts.push(textToEmbed);
-//         const textToEmbed = chunk.summary || chunk.content;
+    // await store.createIndex({
+    //   indexName: "myCollection",
+    //   dimension: 1536,
+    // });
+    // await store.upsert({
+    //   indexName: "myCollection",
+    //   vectors: embeddings,
+    //   metadata: chunks.map(chunk => ({ text: chunk.text })),
+    // });
+    // const contents = [
+    //   "What is the meaning of life?",
+    //   "What is the purpose of existence?",
+    //   "How do I bake a cake?",
+    // ];
 
-//         // generate embedding with embedSummaryTexts
-//         const embedding = await embedder.embed(textToEmbed);
+    // const response = await ai.models.embedContent({
+    //   model: "gemini-embedding-001",
+    //   contents,
+    //   config: {
+    //     outputDimensionality: 768,
+    //   },
+    // });
 
-// //         const { embeddings } = await embedMany({
-// //   values: chunks.map((chunk) => chunk.text),
-// //   model: openai.embedding("text-embedding-3-small"),
-// // });
- 
-// // // 4. Store in vector database
-// // const pgVector = new PgVector({
-// //   connectionString: process.env.POSTGRES_CONNECTION_STRING,
-// // });
-// // await pgVector.upsert({
-// //   indexName: "embeddings",
-// //   vectors: embeddings,
-// // }); // using an index name of 'embeddings'
- 
-// // // 5. Query similar chunks
-// // const results = await pgVector.query({
-// //   indexName: "embeddings",
-// //   queryVector: queryVector,
-// //   topK: 3,
-// // }); // queryVector is the embedding of the query
- 
-// // console.log("Similar chunks:", results);
+    // console.log(response.metadata);
+    // const embeddings = response.embeddings as ContentEmbedding[];
 
-//         // Upsert embedding to vector db along with metadata (id, vector, metadata, tags, bullets)
-//         await vectorDb.upsert({
-//           id: chunk.id,
-//           values: embedding,
-//           metadata: {
-//             title: chunk.canonicalTitle,
-//             tags: chunk.tags,
-//             source: chunk.source,
-//           },
-//         });
+    // // Match embeddings to original text:
+    // contents.forEach((text, i) => {
+    //   console.log(text, embeddings[i].values);
+    // });
 
-//         // persist summarizedChunk in postgres DB
-//         await prisma.indexedChunks.upsert({
-//           where: { id: chunk.id },
-//           update: {
-//             canonicalTitle: chunk.canonicalTitle,
-//             tags: chunk.tags,
-//             entities: chunk.entities,
-//             summary: chunk.summary,
-//             source: chunk.source,
-//           },
-//           create: {
-//             id: chunk.id,
-//             canonicalTitle: chunk.canonicalTitle,
-//             tags: chunk.tags,
-//             entities: chunk.entities,
-//             summary: chunk.summary,
-//             source: chunk.source,
-//           },
-//         });
-
-//         results.push(chunk.id);
-//       } catch (err: any) {
-//         console.error("Indexing failed for chunk:", chunk.id, err);
-//         errors.push(chunk.id);
-//       }
-//     }
+    const chunkTexts: string[] = [];
+    for (const chunk of chunks) {
+      chunkTexts.push(chunk.summary);
+    }
+    console.log(chunkTexts);
+    
 
     return {
       status: errors.length ? "partial" : "success",

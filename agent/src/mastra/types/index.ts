@@ -92,7 +92,7 @@ export const encrichedChunks = [
     tags: [],
     metadata: { page: 3, row: 1, createdAt: "today", links: [] },
   },
-];
+]
 // ```json
 // {
 //   "id": "workflow-xyz",
