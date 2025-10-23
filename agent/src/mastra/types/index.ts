@@ -77,10 +77,9 @@ export const SummarizerInputSchema = z.object({
   chunks: UnifiedDocsSchema,
 });
 
-export type SummarizedChunk = z.infer<typeof SummarizedChunkSchema>;
-
 export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
 
+export type SummarizedChunk = z.infer<typeof SummarizedChunkSchema>;
 // ```json
 // {
 //   "id": "workflow-xyz",
