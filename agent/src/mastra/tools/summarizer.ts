@@ -116,9 +116,9 @@ export const summarizerTool = createTool({
       const cleanText = (response.text?.trim() ?? "")
         .replace(/```json|```/g, "")
         .trim();
-        
-        // const parsedArray: ParsedText[] = JSON.parse(cleanText);
-        const parsedArray = processResponse(cleanText, batch);
+
+      // const parsedArray: ParsedText[] = JSON.parse(cleanText);
+      const parsedArray = processResponse(cleanText, batch);
 
       // Map results back to original chunks
       parsedArray.forEach((parsed, idx) => {
@@ -130,6 +130,7 @@ export const summarizerTool = createTool({
           canonicalTitle: parsed.canonicalTitle ?? "",
           tags: parsed.tags ?? [],
           metadata: batch[idx].metadata,
+          source: batch[idx].fileName,
         });
       });
 

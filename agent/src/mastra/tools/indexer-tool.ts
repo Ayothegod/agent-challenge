@@ -64,11 +64,13 @@ export const indexerTool = createTool({
     const ops = newChunks.map((chunk, i) =>
       Promise.all([
         store.upsert({
-          indexName: "chunkSummary",
+          // ids: 
+          indexName,
           vectors: [vectors[i]],
           metadata: [
             {
               id: chunk.id,
+              source: chunk.source,
               summary: chunk.summary,
               bullets: chunk.bullets,
               title: chunk.canonicalTitle,
@@ -82,6 +84,7 @@ export const indexerTool = createTool({
             tags: chunk.tags,
             entities: chunk.entities,
             summary: chunk.summary,
+            source: chunk.source,
             metadata: JSON.stringify(chunk.metadata),
           },
         }),

@@ -1,9 +1,20 @@
-// Indexer Agent →
-// Takes those enriched chunks.
-// Computes embeddings on the summary or content.
-// Upserts vectors to the vector DB.
-// Saves canonical metadata (title, tags, etc.) to Postgres.
+//NOTE: plan for job queue definition later {
+//   "id": "workflow-xyz",
+//   "type": "ingest_doc",
+//   "steps": [
+//     { "name": "extract", "status": "done" },
+//     { "name": "summarize", "status": "in_progress" }
+//   ],
+//   "context": {...}
+// }
 
+// {
+//   "workflow_id": "123",
+//   "step": "summarize",
+//   "status": "done",
+//   "output": {...},
+//   "next": "index"
+// }
 import z from "zod";
 
 export interface Link {
@@ -64,6 +75,7 @@ export const SummarizedChunkSchema = z.object({
   entities: z.array(z.string()),
   canonicalTitle: z.string(),
   tags: z.array(z.string()),
+  source: z.string(),
   metadata: z.object({
     page: z.number().describe("Document page number (for PDF)"),
     row: z.number().describe("CSV row number"),
@@ -92,42 +104,4 @@ export const encrichedChunks = [
     tags: [],
     metadata: { page: 3, row: 1, createdAt: "today", links: [] },
   },
-]
-// ```json
-// {
-//   "id": "workflow-xyz",
-//   "type": "ingest_doc",
-//   "steps": [
-//     { "name": "extract", "status": "done" },
-//     { "name": "summarize", "status": "in_progress" }
-//   ],
-//   "context": {...}
-// }
-
-// {
-//   "workflow_id": "123",
-//   "step": "summarize",
-//   "status": "done",
-//   "output": {...},
-//   "next": "index"
-// }
-
-// 3 — Data model (core tables / objects)
-// id (uuid)
-// source (url/file/connector)
-// title
-// text_snippet
-// summary
-// keypoints (json)
-// entities (json)
-// tags (array)
-// embedding_id (vector db id)
-// created_at, updated_at
-// version
-// Cluster
-
-// id
-// canonical_chunk_id
-// member_chunk_ids
-// cluster_summary
-// AuditLog
+];

@@ -16,7 +16,7 @@ model indexedChunk {
   canonicalTitle String
   tags           String[]
   metadata       Json
-  source         String?
+  source         String
 
-  @@index([canonicalTitle, chunkId])
+  @@index([canonicalTitle, chunkId, source])
 }
