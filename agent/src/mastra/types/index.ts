@@ -1,3 +1,9 @@
+// Indexer Agent →
+// Takes those enriched chunks.
+// Computes embeddings on the summary or content.
+// Upserts vectors to the vector DB.
+// Saves canonical metadata (title, tags, etc.) to Postgres.
+
 import z from "zod";
 
 export interface Link {

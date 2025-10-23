@@ -9,3 +9,5 @@ logs
 
 tools/ingest-sources
 tools/docs-retriever
+
+/src/generated/prisma

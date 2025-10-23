@@ -136,8 +136,7 @@ export const summarizerTool = createTool({
       await setTimeout(delayMs);
     }
 
-    console.log({ results });
-
+    // console.log({ results });
     return results;
   },
 });
