@@ -64,7 +64,7 @@ export const indexerTool = createTool({
     const ops = newChunks.map((chunk, i) =>
       Promise.all([
         store.upsert({
-          // ids: 
+          ids: [chunk.id],
           indexName,
           vectors: [vectors[i]],
           metadata: [

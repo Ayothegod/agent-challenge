@@ -51,8 +51,6 @@ export const ingestSourcesHandler = async (c: Context) => {
       runtimeContext,
     });
 
-    // console.log({ toolResult });
-
     return c.json({ msg: "workflow.extract.completed", result }, 200);
   } catch (err) {
     return c.json({ error: safeErrorMessage(err) }, 500);

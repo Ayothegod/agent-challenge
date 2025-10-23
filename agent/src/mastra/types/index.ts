@@ -1,20 +1,3 @@
-//NOTE: plan for job queue definition later {
-//   "id": "workflow-xyz",
-//   "type": "ingest_doc",
-//   "steps": [
-//     { "name": "extract", "status": "done" },
-//     { "name": "summarize", "status": "in_progress" }
-//   ],
-//   "context": {...}
-// }
-
-// {
-//   "workflow_id": "123",
-//   "step": "summarize",
-//   "status": "done",
-//   "output": {...},
-//   "next": "index"
-// }
 import z from "zod";
 
 export interface Link {
@@ -105,3 +88,26 @@ export const encrichedChunks = [
     metadata: { page: 3, row: 1, createdAt: "today", links: [] },
   },
 ];
+
+
+// Receive query input
+// e.g. "Who are the software developers in the dataset?"
+
+// Embed the query
+// → same embedding model used during indexing.
+
+// Search vector DB
+// → get top-K most relevant chunks (e.g. 5-10).
+// Optionally filter using Postgres metadata (source, date, tags).
+
+// Rerank results (optional but recommended)
+// → reorder by cosine similarity, recency, or metadata priority.
+
+// Build prompt for LLM
+// Include retrieved context:
+
+// {
+//   "answer": "REV ONUCHE and Damilola Daramola are software developers.",
+//   "citations": ["chunk-1", "chunk-2"],
+//   "retrievedCount": 5
+// }
