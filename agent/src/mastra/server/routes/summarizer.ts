@@ -9,16 +9,14 @@ const runtimeContext = new RuntimeContext();
 export const summarizerHandler = async (c: Context) => {
   try {
     const body = await c.req.json();
-    console.log(body);
-    
 
-    // const summarizerResponse = await summarizerTool.execute({
-    //   context: { chunks: body },
-    //   runtimeContext: {} as any,
-    // });
+    const summarizerResponse = await summarizerTool.execute({
+      context: { chunks: body.chunks },
+      runtimeContext: {} as any,
+    });
 
     return c.json(
-      { msg: "workflow.indexer.completed",  },
+      { msg: "workflow.indexer.completed",  summarizerResponse},
       201
     );
   } catch (err) {

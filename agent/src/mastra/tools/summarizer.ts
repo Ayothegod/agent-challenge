@@ -64,7 +64,7 @@ export const summarizerTool = createTool({
   outputSchema: SummarizerOutputSchema,
   execute: async ({ context, runtimeContext }) => {
     const { chunks } = context;
-    console.log("this is summarizer tool");
+    // console.log("this is summarizer tool");
 
     const results: SummarizedChunk[] = [];
     const batchSize = 5;
