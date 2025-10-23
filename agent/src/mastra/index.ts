@@ -1,11 +1,11 @@
 import { Mastra } from "@mastra/core/mastra";
 import { LibSQLStore } from "@mastra/libsql";
 import { PinoLogger } from "@mastra/loggers";
-import { orchestratorAgent } from "./agents/orchestrator";
+import { queryAgent } from "./agents/query";
 import { apiRoutes } from "./server/routes";
 
 export const mastra = new Mastra({
-  agents: { orchestratorAgent },
+  agents: { queryAgent },
   // storage: new LibSQLStore({url: ":memory:"}),
   storage: new LibSQLStore({ url: "file:../mastra.db" }),
   logger: new PinoLogger({

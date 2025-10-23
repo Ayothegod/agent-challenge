@@ -1,17 +1,22 @@
 // src/mastra/server/routes/searchDocs.ts
-import { safeErrorMessage } from '../util/safeErrorMessage';
+import { queryTool } from "../../tools/query-tool";
+import { safeErrorMessage } from "../util/safeErrorMessage";
 
-export const searchDocsHandler = async (c: any) => {
+export const searchHandler = async (c: any) => {
   try {
-    const { query, namespace = 'default', maxResults = 6 } = await c.req.json();
-    if (!query) return c.json({ error: 'query is required' }, 400);
+    const body = await c.req.json();
+    if (!body)
+      return c.json(
+        { error: "Question is required to query knowledge system." },
+        400
+      );
 
-    // const { docsRetriever } = await import('../../tools/docs-retriever');
-    // const res = await docsRetriever.execute({
-    //   input: { query, namespace, maxResults },
-    // });
+    const queryResult = await queryTool.execute({
+      context: body,
+      runtimeContext: {} as any,
+    });
 
-    return c.json("res");
+    return c.json({ msg: "workflow.query.completed", queryResult }, 200);
   } catch (err) {
     return c.json({ error: safeErrorMessage(err) }, 500);
   }

@@ -106,8 +106,16 @@ export const encrichedChunks = [
 // Build prompt for LLM
 // Include retrieved context:
 
-// {
-//   "answer": "REV ONUCHE and Damilola Daramola are software developers.",
-//   "citations": ["chunk-1", "chunk-2"],
-//   "retrievedCount": 5
-// }
+
+// [
+//   {
+//     text: "Climate change poses significant challenges...",
+//     score: 0.89,
+//     metadata: { source: "article1.txt" },
+//   },
+//   {
+//     text: "Rising temperatures affect crop yields...",
+//     score: 0.82,
+//     metadata: { source: "article1.txt" },
+//   },
+// ];

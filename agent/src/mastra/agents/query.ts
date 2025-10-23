@@ -3,14 +3,14 @@ import { Agent } from "@mastra/core/agent";
 import { LibSQLStore } from "@mastra/libsql";
 import { Memory } from "@mastra/memory";
 import "dotenv/config";
-import { ingestTool } from "../tools/ingest-tool";
+import { queryTool } from "../tools/query-tool";
 
-export const orchestratorAgent = new Agent({
-  id: "orchestrator-agent-id",
-  name: "Orchestrator-Agent",
-  instructions: `"data" field containing the tool’s returned output (if successful)`,
+export const queryAgent = new Agent({
+  name: "Query-Agent",
+  instructions: `You are an AI assistant answering questions based only on the provided context. Do not use outside knowledge.
+`,
   model: google("gemini-2.5-flash"),
-  tools: { ingestTool },
+  tools: { queryTool },
   memory: new Memory({
     storage: new LibSQLStore({
       url: "file:../mastra.db",

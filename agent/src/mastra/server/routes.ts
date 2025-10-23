@@ -1,5 +1,6 @@
 import { indexerHandler } from "./routes/indexer";
 import { ingestSourcesHandler } from "./routes/ingest";
+import { searchHandler } from "./routes/query";
 import { summarizerHandler } from "./routes/summarizer";
 
 const rootRoute = {
@@ -28,10 +29,9 @@ export const apiRoutes: Array<any> = [
     path: "/api/tools/summarizer",
     handler: summarizerHandler,
   },
-  // upload.single("file"),
-  // {
-  //   method: 'POST',
-  //   path: '/api/tools/searchDocs',
-  //   // handler: searchDocsHandler,
-  // },
+  {
+    method: 'POST',
+    path: '/api/tools/query',
+    handler: searchHandler,
+  },
 ];

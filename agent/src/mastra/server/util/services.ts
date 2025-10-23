@@ -1,3 +1,6 @@
+import { GoogleGenAI } from "@google/genai";
+import { MongoDBVector } from "@mastra/mongodb";
+
 class ApiResponse {
   statusCode: number;
   data: any;
@@ -40,4 +43,13 @@ class ApiError extends Error {
   }
 }
 
-export { ApiResponse, ApiError };
+const ai = new GoogleGenAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+});
+
+const store = new MongoDBVector({
+  uri: process.env.MONGODB_URI as string,
+  dbName: process.env.MONGODB_DATABASE as string,
+});
+
+export { ApiResponse, ApiError, ai, store };

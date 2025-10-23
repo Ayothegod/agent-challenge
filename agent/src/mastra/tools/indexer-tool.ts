@@ -1,19 +1,10 @@
 import { createTool } from "@mastra/core/tools";
-import { SummarizerOutputSchema, UnifiedDocsSchema } from "../types/index";
+import { SummarizerOutputSchema } from "../types/index";
 import { summarizerTool } from "./summarizer";
 import z from "zod";
-import { MongoDBVector } from "@mastra/mongodb";
-import { ContentEmbedding, GoogleGenAI } from "@google/genai";
+import { ContentEmbedding } from "@google/genai";
 import { prisma } from "../server/util/prisma";
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
-});
-
-const store = new MongoDBVector({
-  uri: process.env.MONGODB_URI as string,
-  dbName: process.env.MONGODB_DATABASE as string,
-});
+import { ai, store } from "../server/util/services";
 
 export const indexerTool = createTool({
   id: "indexer-tool",
