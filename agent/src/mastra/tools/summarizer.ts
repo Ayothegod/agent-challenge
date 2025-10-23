@@ -86,7 +86,7 @@ export const summarizerTool = createTool({
       const fullPrompt = `
     You are a summarization AI.
     Instructions:
-    - Generate a concise 2–4 line summary.
+    - Generate a concise 1-2 line summary.
     - Extract 2–4 key bullet points.
     - Identify named entities (people, organizations, places, topics) present in the chunk.
     - Suggest a short canonical title for the chunk.

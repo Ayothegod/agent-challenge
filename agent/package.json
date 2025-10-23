@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "mastra dev",
-    "build": "mastra build"
+    "build": "mastra build",
+    "db:gen": "prisma generate",
+    "db:push": "prisma db push"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,7 @@
     "@mastra/libsql": "^0.15.2",
     "@mastra/loggers": "^0.10.16",
     "@mastra/memory": "^0.15.7",
+    "@mastra/mongodb": "^0.14.6",
     "@prisma/client": "5.22.0",
     "ai": "^5.0.76",
     "csv-parser": "^3.2.0",

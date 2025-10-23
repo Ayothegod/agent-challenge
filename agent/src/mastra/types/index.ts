@@ -80,6 +80,19 @@ export const SummarizerInputSchema = z.object({
 export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
 
 export type SummarizedChunk = z.infer<typeof SummarizedChunkSchema>;
+
+export const encrichedChunks = [
+  {
+    id: "d6ab9c3d-9bdb-492e-9245-3d286e3ddffb",
+    summary:
+      "NYSC advises prospective corps members to be wary of fraudsters concerning deployment, relocation, and posting matters. It also warns against proceeding to camp if the graduation date on the call-up letter doesn't match the certificate or statement of result.",
+    bullets: [""],
+    entities: [""],
+    canonicalTitle: "NYSC Fraud Warning and Graduation Date Verification",
+    tags: [],
+    metadata: { page: 3, row: 1, createdAt: "today", links: [] },
+  },
+];
 // ```json
 // {
 //   "id": "workflow-xyz",
