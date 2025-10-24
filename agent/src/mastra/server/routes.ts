@@ -1,3 +1,4 @@
+import { cleanupHandler } from "./routes/cleanup";
 import { indexerHandler } from "./routes/indexer";
 import { ingestSourcesHandler } from "./routes/ingest";
 import { searchHandler } from "./routes/query";
@@ -30,8 +31,13 @@ export const apiRoutes: Array<any> = [
     handler: summarizerHandler,
   },
   {
-    method: 'POST',
-    path: '/api/tools/query',
+    method: "POST",
+    path: "/api/tools/query",
     handler: searchHandler,
+  },
+  {
+    method: "DELETE",
+    path: "/api/tools/cleanup",
+    handler: cleanupHandler,
   },
 ];

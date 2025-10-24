@@ -82,7 +82,7 @@ export const queryTool = createTool({
 
     // const reranked = results.sort((a, b) => b.score - a.score);
     const filteredResults = results.filter((r) => r.score! > 0.78);
-    // console.log({ results, filteredResults, vectorFilter });
+    console.log({ results, filteredResults, vectorFilter });
 
     // NOTE: Limit context length (merge or summarize if >5–10 chunks).
     const promptContext = filteredResults.map((r, i) => {
@@ -100,7 +100,7 @@ export const queryTool = createTool({
 
       return `${i + 1}. ${parts.join(" | ")}`;
     });
-    // console.log({ promptContext });
+    console.log({ promptContext });
 
     const prompt = `
     You are an AI assistant answering questions based only on the provided context.
@@ -121,7 +121,7 @@ export const queryTool = createTool({
       model,
       messages: [{ role: "user", content: prompt }],
     });
-    // console.log(response.usage);
+    console.log(response.usage);
 
     const cleanText = (response.text?.trim() ?? "")
       .replace(/```json|```/g, "")

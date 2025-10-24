@@ -41,7 +41,16 @@ export const indexerTool = createTool({
 
     const response = await ai.models.embedContent({
       model: "gemini-embedding-001",
-      contents: newChunks.map((c) => c.summary),
+      // contents: newChunks.map((c) => c.summary),
+      contents: newChunks.map((c) =>
+        [
+          c.canonicalTitle,
+          c.summary,
+          c.bullets?.join(". "),
+        ]
+          .filter(Boolean)
+          .join(" | ")
+      ),
       config: {
         outputDimensionality: dimension,
       },
@@ -67,7 +76,7 @@ export const indexerTool = createTool({
               bullets: chunk.bullets,
               title: chunk.canonicalTitle,
               tags: chunk.tags,
-              createdAt: new Date()
+              createdAt: new Date(),
             },
           ],
         }),
