@@ -17,6 +17,7 @@ model indexedChunk {
   tags           String[]
   metadata       Json
   source         String
+  sourceType     String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

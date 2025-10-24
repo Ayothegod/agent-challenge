@@ -79,6 +79,7 @@ export const indexerTool = createTool({
             entities: chunk.entities,
             summary: chunk.summary,
             source: chunk.source,
+            sourceType: chunk.fileName,
             metadata: JSON.stringify(chunk.metadata),
           },
         }),

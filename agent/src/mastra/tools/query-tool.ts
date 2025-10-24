@@ -25,7 +25,8 @@ export const queryTool = createTool({
     question: z.string().describe("The question for the query"),
     filters: z
       .object({
-        sources: z.array(z.string()).optional(),
+        sourceName: z.array(z.string()).optional(),
+        sourceType: z.array(z.string()).optional(),
         tags: z.array(z.string()).optional(),
         dateRange: z
           .object({
@@ -66,19 +67,20 @@ export const queryTool = createTool({
     );
 
     const vectorFilter: any = {};
-    if (filters?.sources) vectorFilter.source = { $in: filters.sources };
+    if (filters?.sourceName) vectorFilter.sourceName = { $in: filters.sourceName };
+    if (filters?.sourceType) vectorFilter.sourceType = { $in: filters.sourceType };
     if (filters?.tags) vectorFilter.tags = { $overlaps: filters.tags };
 
     const results = await store.query({
       indexName,
       queryVector: embedding,
       topK: 5,
-      filter: vectorFilter
+      filter: vectorFilter,
     });
 
     // const reranked = results.sort((a, b) => b.score - a.score);
     const filteredResults = results.filter((r) => r.score! > 0.8);
-    console.log({filteredResults, vectorFilter});
+    console.log({ filteredResults, vectorFilter });
 
     // NOTE: Limit context length (merge or summarize if >5–10 chunks).
     const promptContext = filteredResults.map((r, i) => {
