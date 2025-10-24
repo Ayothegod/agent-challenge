@@ -90,4 +90,11 @@ export const encrichedChunks = [
   },
 ];
 
-
+export const queryInstructions = `
+Instructions:
+- Use only the context to answer the question.
+- Provide complete, informative answers, including all relevant details from the context.
+- Cite sources by chunk number (e.g., [1], [3]) if relevant.
+- Include summaries, bullets, entities, or tags when they help clarify the answer.
+- If the context lacks the answer, say: "The information is not available."
+`;

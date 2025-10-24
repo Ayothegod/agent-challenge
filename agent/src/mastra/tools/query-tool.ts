@@ -5,7 +5,7 @@
 // The merged text is sent as context to your agent/LMM
 
 import { createTool } from "@mastra/core/tools";
-import { UnifiedDocsSchema } from "../types/index";
+import { queryInstructions, UnifiedDocsSchema } from "../types/index";
 import { summarizerTool } from "./summarizer";
 import z from "zod";
 import { ai, store, model } from "../server/util/services";
@@ -67,20 +67,22 @@ export const queryTool = createTool({
     );
 
     const vectorFilter: any = {};
-    if (filters?.sourceName) vectorFilter.sourceName = { $in: filters.sourceName };
-    if (filters?.sourceType) vectorFilter.sourceType = { $in: filters.sourceType };
+    if (filters?.sourceName)
+      vectorFilter.sourceName = { $in: filters.sourceName };
+    if (filters?.sourceType)
+      vectorFilter.sourceType = { $in: filters.sourceType };
     if (filters?.tags) vectorFilter.tags = { $overlaps: filters.tags };
 
     const results = await store.query({
       indexName,
       queryVector: embedding,
-      topK: 5,
+      topK: 10,
       filter: vectorFilter,
     });
 
     // const reranked = results.sort((a, b) => b.score - a.score);
-    const filteredResults = results.filter((r) => r.score! > 0.8);
-    console.log({ filteredResults, vectorFilter });
+    const filteredResults = results.filter((r) => r.score! > 0.78);
+    // console.log({ results, filteredResults, vectorFilter });
 
     // NOTE: Limit context length (merge or summarize if >5–10 chunks).
     const promptContext = filteredResults.map((r, i) => {
@@ -98,10 +100,11 @@ export const queryTool = createTool({
 
       return `${i + 1}. ${parts.join(" | ")}`;
     });
+    // console.log({ promptContext });
 
     const prompt = `
     You are an AI assistant answering questions based only on the provided context.
-    Do not use outside knowledge.
+    ${queryInstructions}
 
     Context:
     ${promptContext}
@@ -111,12 +114,6 @@ export const queryTool = createTool({
     Question:
     ${question}
 
-    Instructions:
-    - Use information only from the context.
-    - If context lacks the answer, say: "The information is not available."
-    - Write a short, direct answer.
-    - Cite sources by chunk number (e.g., [1], [3]) if relevant.
-
     Answer:
         `.trim();
 
@@ -124,6 +121,7 @@ export const queryTool = createTool({
       model,
       messages: [{ role: "user", content: prompt }],
     });
+    // console.log(response.usage);
 
     const cleanText = (response.text?.trim() ?? "")
       .replace(/```json|```/g, "")
@@ -132,7 +130,7 @@ export const queryTool = createTool({
     return {
       answer: cleanText,
       citations: filteredResults.map((r) => {
-        return { source: r.metadata?.source, id: r.id };
+        return { source: r.metadata?.sourceName, id: r.id };
       }),
       retrievedCount: filteredResults.length,
     };

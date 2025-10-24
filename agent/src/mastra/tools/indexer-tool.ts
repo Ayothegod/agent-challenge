@@ -34,7 +34,7 @@ export const indexerTool = createTool({
     });
     const existingIds = new Set(existing.map((e) => e.chunkId));
     const newChunks = chunks.filter((c) => !existingIds.has(c.id));
-    console.log({ existing, existingIds, newChunks });
+    // console.log({ existing, existingIds, newChunks });
 
     if (newChunks.length < 1)
       return { msg: "The current chunks are already indexed." };
@@ -61,8 +61,8 @@ export const indexerTool = createTool({
           metadata: [
             {
               id: chunk.id,
-              sourceName: chunk.source,
-              sourceType: chunk.fileName,
+              sourceName: chunk.fileName,
+              sourceType: chunk.source,
               summary: chunk.summary,
               bullets: chunk.bullets,
               title: chunk.canonicalTitle,
@@ -78,8 +78,8 @@ export const indexerTool = createTool({
             tags: chunk.tags,
             entities: chunk.entities,
             summary: chunk.summary,
-            source: chunk.source,
-            sourceType: chunk.fileName,
+            source: chunk.fileName,
+            sourceType: chunk.source,
             metadata: JSON.stringify(chunk.metadata),
           },
         }),

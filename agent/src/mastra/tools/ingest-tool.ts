@@ -9,10 +9,10 @@ export const ingestTool = createTool({
   outputSchema: UnifiedDocsSchema,
   execute: async ({ context }) => {
 
-    const summarizerResponse = await summarizerTool.execute({
-      context: { chunks: context },
-      runtimeContext: {} as any,
-    });
+    // const summarizerResponse = await summarizerTool.execute({
+    //   context: { chunks: context },
+    //   runtimeContext: {} as any,
+    // });
 
     return context;
   },
