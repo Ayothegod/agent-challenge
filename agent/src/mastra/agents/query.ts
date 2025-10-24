@@ -4,6 +4,11 @@ import { LibSQLStore } from "@mastra/libsql";
 import { Memory } from "@mastra/memory";
 import "dotenv/config";
 import { queryTool } from "../tools/query-tool";
+// import { MONGODB_PROMPT } from "@mastra/mongodb";
+//   instructions: `
+// Process queries using the provided context. Structure responses to be concise and relevant.
+// ${MONGODB_PROMPT}
+// `,
 
 export const queryAgent = new Agent({
   name: "Query-Agent",

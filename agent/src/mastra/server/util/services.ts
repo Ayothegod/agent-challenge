@@ -1,5 +1,8 @@
+import { google } from "@ai-sdk/google";
 import { GoogleGenAI } from "@google/genai";
 import { MongoDBVector } from "@mastra/mongodb";
+
+export const model = google("gemini-2.0-flash");
 
 class ApiResponse {
   statusCode: number;

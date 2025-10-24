@@ -1,4 +1,3 @@
-import { google } from "@ai-sdk/google";
 import { createTool } from "@mastra/core/tools";
 import { generateText } from "ai";
 import { setTimeout } from "timers/promises";
@@ -9,7 +8,7 @@ import {
   SummarizerOutputSchema,
   UnifiedDoc,
 } from "../types/index";
-const model = google("gemini-2.0-flash");
+import { model } from "../server/util/services";
 
 function chunkArray<T>(arr: T[], size: number): T[][] {
   const batches: T[][] = [];
