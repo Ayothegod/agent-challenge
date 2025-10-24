@@ -90,6 +90,12 @@ export const encrichedChunks = [
   },
 ];
 
+interface QueryFilters {
+  sources?: string[]; // ["pdf", "csv"]
+  tags?: string[]; // ["AI", "Healthcare"]
+  dateRange?: { from: string; to: string };
+}
+
 export const queryInstructions = `
 Instructions:
 - Use only the context to answer the question.

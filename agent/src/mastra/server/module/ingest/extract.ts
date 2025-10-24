@@ -4,11 +4,21 @@ import { Readable } from "stream";
 import { ApiError } from "../../util/services";
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
-// const pdfDataPath = path.join(__dirname, "../../assets/addendum.pdf");
+// const pdfDataPath = path.join(__dirname, "");
 
 export interface Link {
   text: string;
   url: string;
+}
+
+function cleanPdfText(text: string) {
+  return text
+    .replace(/\t+/g, " ") // remove tabs
+    .replace(/--\s*\d+\s*of\s*\d+\s*--\s*\d*/gi, "\n") // handle page markers
+    .replace(/\s{2,}/g, " ") // collapse extra spaces
+    .replace(/\n{2,}/g, "\n") // collapse blank lines
+    .replace(/([a-z])-\s+([a-z])/gi, "$1$2") // fix hyphenated breaks
+    .trim();
 }
 
 class Extract {
@@ -33,6 +43,7 @@ class Extract {
       //     const tableText = table.map((row) => tables.push(row));
       //   }
       // }
+      console.log(cleanPdfText(textResult.text));
 
       const data = {
         totalPages: info.total,
@@ -40,7 +51,8 @@ class Extract {
         Author: info.info?.Author,
         links,
         // tables: tables?.filter((r) => r.length > 1),
-        text: textResult.text.trim(),
+        // text: textResult.text.trim(),
+        text: cleanPdfText(textResult.text),
       };
       return { cleanPdf: data };
     } catch (error) {

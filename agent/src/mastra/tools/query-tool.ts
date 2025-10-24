@@ -1,9 +1,3 @@
-// It handles retrieval, ranking, prompt assembly, and answer generation.
-// The query → turned into a vector
-// Vector store finds top-k most similar chunks (say 3–5)
-// Backend merges those chunks’ text (and maybe adjacent ones)
-// The merged text is sent as context to your agent/LMM
-
 import { createTool } from "@mastra/core/tools";
 import { queryInstructions, UnifiedDocsSchema } from "../types/index";
 import { summarizerTool } from "./summarizer";
@@ -12,11 +6,29 @@ import { ai, store, model } from "../server/util/services";
 import { ContentEmbedding } from "@google/genai";
 import { generateText } from "ai";
 
-interface QueryFilters {
-  sources?: string[]; // ["pdf", "csv"]
-  tags?: string[]; // ["AI", "Healthcare"]
-  dateRange?: { from: string; to: string };
-}
+const buildFilter = (filter: {
+  dateRange?: { from: string; to?: string };
+  sourceName?: string[];
+  sourceType?: string[];
+  tags?: string[];
+}) => {
+  const dbFilter: Record<string, any> = {};
+  // const dbFilter: any = {};
+
+  if (filter.dateRange) {
+    const { from, to } = filter.dateRange;
+    dbFilter.createdAt = {
+      gte: new Date(from).toISOString(),
+      lte: to ? new Date(to).toISOString() : new Date().toISOString(),
+    };
+  }
+
+  if (filter.sourceName) dbFilter.sourceName = { $in: filter.sourceName };
+  if (filter.sourceType) dbFilter.sourceType = { $in: filter.sourceType };
+  if (filter.tags) dbFilter.tags = { hasSome: filter.tags };
+
+  return dbFilter;
+};
 
 export const queryTool = createTool({
   id: "query-tool",
@@ -66,12 +78,22 @@ export const queryTool = createTool({
       (e) => e.values!
     );
 
-    const vectorFilter: any = {};
-    if (filters?.sourceName)
-      vectorFilter.sourceName = { $in: filters.sourceName };
-    if (filters?.sourceType)
-      vectorFilter.sourceType = { $in: filters.sourceType };
-    if (filters?.tags) vectorFilter.tags = { $overlaps: filters.tags };
+    // const vectorFilter: any = {};
+    // if (filters?.sourceName) vectorFilter.sourceName = { $in: filters.sourceName };
+    // if (filters?.sourceType) vectorFilter.sourceType = { $in: filters.sourceType };
+    // if (filters?.tags) vectorFilter.tags = { $overlaps: filters.tags };
+
+    const vectorFilter = buildFilter({
+      sourceName: filters?.sourceName,
+      sourceType: filters?.sourceType,
+      tags: filters?.tags,
+      dateRange: {
+        from: filters?.dateRange?.from
+          ? filters?.dateRange?.from
+          : "2025-10-23",
+        to: filters?.dateRange?.to,
+      },
+    });
 
     const results = await store.query({
       indexName,
