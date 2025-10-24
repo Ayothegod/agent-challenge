@@ -12,12 +12,29 @@ import { ai, store, model } from "../server/util/services";
 import { ContentEmbedding } from "@google/genai";
 import { generateText } from "ai";
 
+interface QueryFilters {
+  sources?: string[]; // ["pdf", "csv"]
+  tags?: string[]; // ["AI", "Healthcare"]
+  dateRange?: { from: string; to: string };
+}
+
 export const queryTool = createTool({
   id: "query-tool",
   description: "Get Unified docs from extract API and send to other tools.",
   inputSchema: z.object({
     question: z.string().describe("The question for the query"),
-    filters: z.array(z.string()).optional(),
+    filters: z
+      .object({
+        sources: z.array(z.string()).optional(),
+        tags: z.array(z.string()).optional(),
+        dateRange: z
+          .object({
+            from: z.string(),
+            to: z.string(),
+          })
+          .optional(),
+      })
+      .optional(),
   }),
   outputSchema: z.object({
     answer: z.string().describe("Query analyzer result for question"),
@@ -48,21 +65,20 @@ export const queryTool = createTool({
       (e) => e.values!
     );
 
-    // If your vectors have metadata like source, chunkId, or type, filter results before or after ranking.
+    const vectorFilter: any = {};
+    if (filters?.sources) vectorFilter.source = { $in: filters.sources };
+    if (filters?.tags) vectorFilter.tags = { $overlaps: filters.tags };
+
     const results = await store.query({
       indexName,
       queryVector: embedding,
       topK: 5,
-      filter: {
-        // source: source.split(".")[1] == ""
-        // category: "electronics",
-        // price: { $lt: 1000 },
-        // inStock: true,
-      },
+      filter: vectorFilter
     });
 
     // const reranked = results.sort((a, b) => b.score - a.score);
     const filteredResults = results.filter((r) => r.score! > 0.8);
+    console.log({filteredResults, vectorFilter});
 
     // NOTE: Limit context length (merge or summarize if >5–10 chunks).
     const promptContext = filteredResults.map((r, i) => {
@@ -80,8 +96,6 @@ export const queryTool = createTool({
 
       return `${i + 1}. ${parts.join(" | ")}`;
     });
-
-    console.log({ promptContext });
 
     const prompt = `
     You are an AI assistant answering questions based only on the provided context.

@@ -59,6 +59,7 @@ export const SummarizedChunkSchema = z.object({
   canonicalTitle: z.string(),
   tags: z.array(z.string()),
   source: z.string(),
+  fileName: z.string(),
   metadata: z.object({
     page: z.number().describe("Document page number (for PDF)"),
     row: z.number().describe("CSV row number"),
@@ -89,38 +90,4 @@ export const encrichedChunks = [
   },
 ];
 
-// Receive query input
-// e.g. "Who are the software developers in the dataset?"
 
-// Embed the query
-// → same embedding model used during indexing.
-
-// Search vector DB
-// → get top-K most relevant chunks (e.g. 5-10).
-// Optionally filter using Postgres metadata (source, date, tags).
-
-// Rerank results (optional but recommended)
-// → reorder by cosine similarity, recency, or metadata priority.
-
-// Build prompt for LLM
-// Include retrieved context:
-
-// {
-//   "answer": "REV ONUCHE [1] and Damilola Daramola [2] are software developers.",
-//   "citations": [1, 2],
-//   "retrievedCount": 5
-// }
-//NOTE: results example 1. Summary: AI enhances diagnosis accuracy and speeds drug discovery | Bullets: Improves diagnostics; Accelerates drugs | Tags: AI, Healthcare | Entities: Artificial Intelligence, Healthcare | Source: pdf
-
-// {
-//   id: '032d354b-e0e8-4eb9-b766-6d757577fafb',
-//   score: 0.7064365744590759,
-//   metadata: {
-//     id: '3d7844b4-4070-431c-a6eb-dbd654b0468b',
-//     summary: 'Prospective Corps Members are advised against night travel and should bring Degree/HND Certificates or Statements of Results to camp.',
-//     bullets: [Array],
-//     title: 'Important Notice for Prospective Corps Members'
-//   },
-//   vector: undefined,
-//   document: undefined
-// }

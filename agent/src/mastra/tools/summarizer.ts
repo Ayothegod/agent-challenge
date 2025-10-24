@@ -129,7 +129,8 @@ export const summarizerTool = createTool({
           canonicalTitle: parsed.canonicalTitle ?? "",
           tags: parsed.tags ?? [],
           metadata: batch[idx].metadata,
-          source: batch[idx].fileName,
+          source: batch[idx].source,
+          fileName: batch[idx].fileName
         });
       });
 

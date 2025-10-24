@@ -61,10 +61,13 @@ export const indexerTool = createTool({
           metadata: [
             {
               id: chunk.id,
-              source: chunk.source,
+              sourceName: chunk.source,
+              sourceType: chunk.fileName,
               summary: chunk.summary,
               bullets: chunk.bullets,
               title: chunk.canonicalTitle,
+              tags: chunk.tags,
+              createdAt: new Date()
             },
           ],
         }),
