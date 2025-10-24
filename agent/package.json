@@ -31,6 +31,7 @@
     "csv-parser": "^3.2.0",
     "hono": "^4.10.2",
     "mammoth": "^1.11.0",
+    "ollama-ai-provider-v2": "^1.5.1",
     "p-limit": "^7.2.0",
     "pdf-parse": "^2.4.5",
     "prisma": "^5.22.0",

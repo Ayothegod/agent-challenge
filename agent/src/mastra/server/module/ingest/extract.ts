@@ -43,7 +43,7 @@ class Extract {
       //     const tableText = table.map((row) => tables.push(row));
       //   }
       // }
-      console.log(cleanPdfText(textResult.text));
+      // console.log(cleanPdfText(textResult.text));
 
       const data = {
         totalPages: info.total,

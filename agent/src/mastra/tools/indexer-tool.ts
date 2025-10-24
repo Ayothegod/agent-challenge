@@ -85,7 +85,6 @@ export const indexerTool = createTool({
             chunkId: chunk.id,
             canonicalTitle: chunk.canonicalTitle,
             tags: chunk.tags,
-            entities: chunk.entities,
             summary: chunk.summary,
             source: chunk.fileName,
             sourceType: chunk.source,

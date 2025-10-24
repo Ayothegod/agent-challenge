@@ -9,6 +9,11 @@ import {
   UnifiedDoc,
 } from "../types/index";
 import { model } from "../server/util/services";
+import { createOllama } from "ollama-ai-provider-v2";
+
+export const ollama = createOllama({
+  baseURL: process.env.NOS_OLLAMA_API_URL || process.env.OLLAMA_API_URL,
+});
 
 function chunkArray<T>(arr: T[], size: number): T[][] {
   const batches: T[][] = [];
@@ -32,7 +37,6 @@ function processResponse(cleanText: string, batch: UnifiedDoc[]) {
     parsedArray = batch.map(() => ({
       summary: "",
       bullets: [],
-      entities: [],
       canonicalTitle: "",
       tags: [],
     }));
@@ -42,7 +46,6 @@ function processResponse(cleanText: string, batch: UnifiedDoc[]) {
     parsedArray.push({
       summary: "",
       bullets: [],
-      entities: [],
       canonicalTitle: "",
       tags: [],
     });
@@ -66,12 +69,13 @@ export const summarizerTool = createTool({
     console.log("this is summarizer tool");
 
     const results: SummarizedChunk[] = [];
-    const batchSize = 5;
-    const delayMs = 500;
+    const batchSize = 2;
+    const delayMs = 50;
 
     const batches = chunkArray(chunks, batchSize);
 
     for (const batch of batches) {
+      console.time("myAsyncAction");
       const batchPrompt = batch
         .map(
           (chunk) => `
@@ -83,20 +87,21 @@ export const summarizerTool = createTool({
         .join("\n\n");
 
       const fullPrompt = `
+      Summarize this text, including all key points, administrative notes, names, dates, or rules mentioned. Do not skip any part.
+      If the chunk has important names, dates, or identifiers, include them in the summary and bullets even if text is short.
+
     You are a summarization AI.
     Instructions:
     - Generate a concise 1-2 line summary.
     - Extract 2–4 key bullet points.
-    - Identify named entities (people, organizations, places, topics) present in the chunk.
     - Suggest a short canonical title for the chunk.
-    - Provide 3–5 relevant topic or keyword tags.
+    - Provide 3–5 relevant topic or keyword tags - (people, organizations, places, topics) present in the chunk.
 
     Return a **strict JSON** object with this structure:
 
     {
       "summary": "...",
       "bullets": ["...", "..."],
-      "entities": ["...", "..."],
       "canonicalTitle": "...",
       "tags": ["...", "..."]
     }
@@ -106,36 +111,49 @@ export const summarizerTool = createTool({
     Do not include any text outside the JSON. Return an array of JSON objects, one per chunk, in the same order.
     ${batchPrompt}
 `;
+      console.log(
+        "before gen",
+        batch.map((i) => i.id)
+      );
 
       const response = await generateText({
-        model,
+        model: ollama("qwen3:8b"),
+        // model,
         messages: [{ role: "user", content: fullPrompt }],
       });
 
       const cleanText = (response.text?.trim() ?? "")
         .replace(/```json|```/g, "")
         .trim();
+      // console.log(cleanText);
 
-      // const parsedArray: ParsedText[] = JSON.parse(cleanText);
       const parsedArray = processResponse(cleanText, batch);
 
-      // Map results back to original chunks
       parsedArray.forEach((parsed, idx) => {
         results.push({
           id: batch[idx].id,
           summary: parsed.summary ?? "",
           bullets: parsed.bullets ?? [],
-          entities: parsed.entities ?? [],
           canonicalTitle: parsed.canonicalTitle ?? "",
           tags: parsed.tags ?? [],
           metadata: batch[idx].metadata,
           source: batch[idx].source,
-          fileName: batch[idx].fileName
+          fileName: batch[idx].fileName,
         });
       });
 
+      console.log(
+        "after gen",
+        batch.map((i) => i.id)
+      );
+
       await setTimeout(delayMs);
+      console.timeEnd("myAsyncAction");
     }
+
+    console.log(
+      results.filter((r) => r.bullets.length < 1 && r.tags.length < 1)
+    );
 
     // console.log({ results });
     return results;

@@ -12,7 +12,6 @@ model indexedChunk {
   chunkId        String   @unique
   summary        String
   bullets        String[]
-  entities       String[]
   canonicalTitle String
   tags           String[]
   metadata       Json
