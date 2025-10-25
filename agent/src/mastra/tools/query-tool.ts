@@ -1,10 +1,9 @@
-import { createTool } from "@mastra/core/tools";
-import { queryInstructions, UnifiedDocsSchema } from "../types/index";
-import { summarizerTool } from "./summarizer";
-import z from "zod";
-import { ai, store, model } from "../server/util/services";
 import { ContentEmbedding } from "@google/genai";
+import { createTool } from "@mastra/core/tools";
 import { generateText } from "ai";
+import z from "zod";
+import { ai, model, store } from "../server/util/services";
+import { queryInstructions } from "../types/index";
 
 const buildFilter = (filter: {
   dateRange?: { from: string; to?: string };

@@ -151,10 +151,6 @@ export const summarizerTool = createTool({
       console.timeEnd("myAsyncAction");
     }
 
-    console.log(
-      results.filter((r) => r.bullets.length < 1 && r.tags.length < 1)
-    );
-
     // console.log({ results });
     return results;
   },

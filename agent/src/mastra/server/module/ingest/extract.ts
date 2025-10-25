@@ -51,7 +51,6 @@ class Extract {
         Author: info.info?.Author,
         links,
         // tables: tables?.filter((r) => r.length > 1),
-        // text: textResult.text.trim(),
         text: cleanPdfText(textResult.text),
       };
       return { cleanPdf: data };
