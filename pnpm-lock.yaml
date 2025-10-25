@@ -50,6 +50,9 @@ importers:
       mammoth:
         specifier: ^1.11.0
         version: 1.11.0
+      ollama-ai-provider-v2:
+        specifier: ^1.5.1
+        version: 1.5.1(zod@4.1.12)
       p-limit:
         specifier: ^7.2.0
         version: 7.2.0
@@ -2656,6 +2659,12 @@ packages:
   object-inspect@1.13.4:
     resolution: {integrity: sha512-W67iLl4J2EXEGTbfeHCffrjDfitvLANg0UlX3wFUUSTx92KXRFegMHUVgSqE+wvhAbi4WqjGg9czysTV2Epbew==}
     engines: {node: '>= 0.4'}
+
+  ollama-ai-provider-v2@1.5.1:
+    resolution: {integrity: sha512-5R3z7Y+mm8VEtoq+rIoIqkEy83oYM3DXX6Nyrn6yofYvYl56BCoJMNwXsPrpmCI0O4fN/gAIDTLpznYMRGzZ5g==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^4.0.16
 
   on-exit-leak-free@2.1.2:
     resolution: {integrity: sha512-0eJJY6hXLGf1udHwfNftBqH+g73EU4B504nZeKpz1sYRKafAghwxEJunB2O7rDZkL4PGfsMVnTXZ2EjibbqcsA==}
@@ -6191,6 +6200,12 @@ snapshots:
   object-assign@4.1.1: {}
 
   object-inspect@1.13.4: {}
+
+  ollama-ai-provider-v2@1.5.1(zod@4.1.12):
+    dependencies:
+      '@ai-sdk/provider': 2.0.0
+      '@ai-sdk/provider-utils': 3.0.12(zod@4.1.12)
+      zod: 4.1.12
 
   on-exit-leak-free@2.1.2: {}
 
