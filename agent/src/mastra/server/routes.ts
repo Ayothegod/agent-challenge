@@ -9,7 +9,7 @@ const rootRoute = {
   path: "/api/get",
   // handler: (c: any) => c.text('OK'),
   handler: async (c: any) => {
-    return c.text("OK");
+    return c.json("OK");
   },
 };
 
