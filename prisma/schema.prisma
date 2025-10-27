@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model indexedChunk {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  chunkId        String   @unique
+  summary        String
+  bullets        String[]
+  canonicalTitle String
+  tags           String[]
+  metadata       Json
+  source         String
+  sourceType     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([canonicalTitle, chunkId, source])
+}

@@ -10,6 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiSummarizerRouteImport } from './routes/api/summarizer'
+import { Route as ApiQueryRouteImport } from './routes/api/query'
+import { Route as ApiIngestRouteImport } from './routes/api/ingest'
+import { Route as ApiIndexerRouteImport } from './routes/api/indexer'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
@@ -21,6 +25,26 @@ import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ss
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSummarizerRoute = ApiSummarizerRouteImport.update({
+  id: '/api/summarizer',
+  path: '/api/summarizer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiQueryRoute = ApiQueryRouteImport.update({
+  id: '/api/query',
+  path: '/api/query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIngestRoute = ApiIngestRouteImport.update({
+  id: '/api/ingest',
+  path: '/api/ingest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiIndexerRoute = ApiIndexerRouteImport.update({
+  id: '/api/indexer',
+  path: '/api/indexer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
@@ -61,6 +85,10 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/indexer': typeof ApiIndexerRoute
+  '/api/ingest': typeof ApiIngestRoute
+  '/api/query': typeof ApiQueryRoute
+  '/api/summarizer': typeof ApiSummarizerRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -71,6 +99,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/indexer': typeof ApiIndexerRoute
+  '/api/ingest': typeof ApiIngestRoute
+  '/api/query': typeof ApiQueryRoute
+  '/api/summarizer': typeof ApiSummarizerRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -82,6 +114,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/indexer': typeof ApiIndexerRoute
+  '/api/ingest': typeof ApiIngestRoute
+  '/api/query': typeof ApiQueryRoute
+  '/api/summarizer': typeof ApiSummarizerRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
   '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
@@ -94,6 +130,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/indexer'
+    | '/api/ingest'
+    | '/api/query'
+    | '/api/summarizer'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -104,6 +144,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/indexer'
+    | '/api/ingest'
+    | '/api/query'
+    | '/api/summarizer'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -114,6 +158,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/api/indexer'
+    | '/api/ingest'
+    | '/api/query'
+    | '/api/summarizer'
     | '/demo/api/names'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
@@ -125,6 +173,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiIndexerRoute: typeof ApiIndexerRoute
+  ApiIngestRoute: typeof ApiIngestRoute
+  ApiQueryRoute: typeof ApiQueryRoute
+  ApiSummarizerRoute: typeof ApiSummarizerRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
@@ -141,6 +193,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/summarizer': {
+      id: '/api/summarizer'
+      path: '/api/summarizer'
+      fullPath: '/api/summarizer'
+      preLoaderRoute: typeof ApiSummarizerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/query': {
+      id: '/api/query'
+      path: '/api/query'
+      fullPath: '/api/query'
+      preLoaderRoute: typeof ApiQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ingest': {
+      id: '/api/ingest'
+      path: '/api/ingest'
+      fullPath: '/api/ingest'
+      preLoaderRoute: typeof ApiIngestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/indexer': {
+      id: '/api/indexer'
+      path: '/api/indexer'
+      fullPath: '/api/indexer'
+      preLoaderRoute: typeof ApiIndexerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/start/server-funcs': {
@@ -197,6 +277,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiIndexerRoute: ApiIndexerRoute,
+  ApiIngestRoute: ApiIngestRoute,
+  ApiQueryRoute: ApiQueryRoute,
+  ApiSummarizerRoute: ApiSummarizerRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
