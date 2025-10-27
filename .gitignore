@@ -5,6 +5,7 @@ dist-ssr
 *.local
 count.txt
 .env
+.env.example
 .nitro
 .tanstack
 .wrangler
@@ -15,3 +16,8 @@ todos.json
 Todo.MD
 BUILD.MD
 .mastra
+
+dev.db
+dev.db-journal
+
+prisma/migrations

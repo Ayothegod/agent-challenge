@@ -5,7 +5,7 @@ import { reactStartCookies } from "better-auth/react-start";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
-    provider: "mongodb",
+    provider: "sqlite",
   }),
   socialProviders: {
     github: {

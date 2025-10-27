@@ -9,9 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiSummarizerRouteImport } from './routes/api/summarizer'
 import { Route as ApiQueryRouteImport } from './routes/api/query'
+import { Route as ApiProtectRouteImport } from './routes/api/protect'
 import { Route as ApiIndexerRouteImport } from './routes/api/indexer'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
@@ -23,9 +26,19 @@ import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
 import { Route as DemoStartSsrDataOnlyRouteImport } from './routes/demo/start.ssr.data-only'
 
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSummarizerRoute = ApiSummarizerRouteImport.update({
@@ -36,6 +49,11 @@ const ApiSummarizerRoute = ApiSummarizerRouteImport.update({
 const ApiQueryRoute = ApiQueryRouteImport.update({
   id: '/api/query',
   path: '/api/query',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProtectRoute = ApiProtectRouteImport.update({
+  id: '/api/protect',
+  path: '/api/protect',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiIndexerRoute = ApiIndexerRouteImport.update({
@@ -91,9 +109,12 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/api/indexer': typeof ApiIndexerRoute
+  '/api/protect': typeof ApiProtectRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/auth/login': typeof AuthLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -106,9 +127,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/api/indexer': typeof ApiIndexerRoute
+  '/api/protect': typeof ApiProtectRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/auth/login': typeof AuthLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -122,9 +146,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/api/indexer': typeof ApiIndexerRoute
+  '/api/protect': typeof ApiProtectRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/auth/login': typeof AuthLoginRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -139,9 +166,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/api/indexer'
+    | '/api/protect'
     | '/api/query'
     | '/api/summarizer'
+    | '/auth/login'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -154,9 +184,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard'
     | '/api/indexer'
+    | '/api/protect'
     | '/api/query'
     | '/api/summarizer'
+    | '/auth/login'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -169,9 +202,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/api/indexer'
+    | '/api/protect'
     | '/api/query'
     | '/api/summarizer'
+    | '/auth/login'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -185,9 +221,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   ApiIndexerRoute: typeof ApiIndexerRoute
+  ApiProtectRoute: typeof ApiProtectRoute
   ApiQueryRoute: typeof ApiQueryRoute
   ApiSummarizerRoute: typeof ApiSummarizerRoute
+  AuthLoginRoute: typeof AuthLoginRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiIngestSourceRoute: typeof ApiIngestSourceRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -201,11 +240,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/summarizer': {
@@ -220,6 +273,13 @@ declare module '@tanstack/react-router' {
       path: '/api/query'
       fullPath: '/api/query'
       preLoaderRoute: typeof ApiQueryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/protect': {
+      id: '/api/protect'
+      path: '/api/protect'
+      fullPath: '/api/protect'
+      preLoaderRoute: typeof ApiProtectRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/indexer': {
@@ -297,9 +357,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   ApiIndexerRoute: ApiIndexerRoute,
+  ApiProtectRoute: ApiProtectRoute,
   ApiQueryRoute: ApiQueryRoute,
   ApiSummarizerRoute: ApiSummarizerRoute,
+  AuthLoginRoute: AuthLoginRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiIngestSourceRoute: ApiIngestSourceRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,

@@ -1,21 +1,26 @@
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
 model indexedChunk {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String   @id @default(cuid())
   chunkId        String   @unique
   summary        String
-  bullets        String[]
+  bullets        String
   canonicalTitle String
-  tags           String[]
-  metadata       Json
+  tags           String
+  metadata       String
   source         String
   sourceType     String
   createdAt      DateTime @default(now())
@@ -24,62 +29,78 @@ model indexedChunk {
   @@index([canonicalTitle, chunkId, source])
 }
 
-model User {
-  id            String    @id @map("_id")
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+// model indexedChunk {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   chunkId        String   @unique
+//   summary        String
+//   bullets        String[]
+//   canonicalTitle String
+//   tags           String[]
+//   metadata       Json
+//   source         String
+//   sourceType     String
+//   createdAt      DateTime @default(now())
+//   updatedAt      DateTime @updatedAt
 
-  @@unique([email])
-  @@map("user")
-}
+//   @@index([canonicalTitle, chunkId, source])
+// }
 
-model Session {
-  id        String   @id @map("_id")
-  expiresAt DateTime
-  token     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// model User {
+//   id            String    @id @map("_id")
+//   name          String
+//   email         String
+//   emailVerified Boolean   @default(false)
+//   image         String?
+//   createdAt     DateTime  @default(now())
+//   updatedAt     DateTime  @default(now()) @updatedAt
+//   sessions      Session[]
+//   accounts      Account[]
 
-  @@unique([token])
-  @@map("session")
-}
+//   @@unique([email])
+//   @@map("user")
+// }
 
-model Account {
-  id                    String    @id @map("_id")
-  accountId             String
-  providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+// model Session {
+//   id        String   @id @map("_id")
+//   expiresAt DateTime
+//   token     String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   ipAddress String?
+//   userAgent String?
+//   userId    String
+//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("account")
-}
+//   @@unique([token])
+//   @@map("session")
+// }
 
-model Verification {
-  id         String   @id @map("_id")
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
+// model Account {
+//   id                    String    @id @map("_id")
+//   accountId             String
+//   providerId            String
+//   userId                String
+//   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   accessToken           String?
+//   refreshToken          String?
+//   idToken               String?
+//   accessTokenExpiresAt  DateTime?
+//   refreshTokenExpiresAt DateTime?
+//   scope                 String?
+//   password              String?
+//   createdAt             DateTime  @default(now())
+//   updatedAt             DateTime  @updatedAt
 
-  @@map("verification")
-}
+//   @@map("account")
+// }
+
+// model Verification {
+//   id         String   @id @map("_id")
+//   identifier String
+//   value      String
+//   expiresAt  DateTime
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @default(now()) @updatedAt
+
+//   @@map("verification")
+// }
