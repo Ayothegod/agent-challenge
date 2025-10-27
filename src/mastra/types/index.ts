@@ -9,8 +9,10 @@ export interface UnifiedDoc {
   id: string;
   source: string; // "csv" | "pdf" | "docx"
   fileName: string;
-  title: string; // filename or document title
-  content: string; // plain text
+  canonicalTitle: string; // filename or document title
+  summary: string; // plain text
+  bullets?: string[]
+  tags?: string[]
   metadata: {
     page: number; // for pdf
     row: number; // for csv
@@ -75,12 +77,6 @@ export const SummarizerOutputSchema = z.array(SummarizedChunkSchema);
 
 export type SummarizedChunk = z.infer<typeof SummarizedChunkSchema>;
 
-interface QueryFilters {
-  sources?: string[]; // ["pdf", "csv"]
-  tags?: string[]; // ["AI", "Healthcare"]
-  dateRange?: { from: string; to: string };
-}
-
 export const queryInstructions = `
 Instructions:
 - Use only the context to answer the question.
@@ -89,3 +85,20 @@ Instructions:
 - Include summaries, bullets, entities, or tags when they help clarify the answer.
 - If the context lacks the answer, say: "The information is not available."
 `;
+
+export const IndexerInputSchema = z.object({
+  id: z.string(),
+  summary: z.string(),
+  bullets: z.array(z.string()).optional(),
+  canonicalTitle: z.string(),
+  tags: z.array(z.string()).optional(),
+  source: z.string(),
+  fileName: z.string(),
+  metadata: z.object({
+    page: z.number().describe("Document page number (for PDF)"),
+    row: z.number().describe("CSV row number"),
+    author: z.string().optional().describe("Document author"),
+    createdAt: z.string().describe("Creation date"),
+    links: z.array(Link).optional(),
+  }),
+});

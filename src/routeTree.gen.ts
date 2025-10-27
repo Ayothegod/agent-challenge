@@ -58,9 +58,9 @@ const DemoApiNamesRoute = DemoApiNamesRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiIngestSourceRoute = ApiIngestSourceRouteImport.update({
-  id: '/$source',
-  path: '/$source',
-  getParentRoute: () => ApiIngestRoute,
+  id: '/api/ingest/$source',
+  path: '/api/ingest/$source',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
   id: '/demo/start/ssr/',
@@ -176,6 +176,7 @@ export interface RootRouteChildren {
   ApiIndexerRoute: typeof ApiIndexerRoute
   ApiQueryRoute: typeof ApiQueryRoute
   ApiSummarizerRoute: typeof ApiSummarizerRoute
+  ApiIngestSourceRoute: typeof ApiIngestSourceRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
   DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
@@ -238,10 +239,10 @@ declare module '@tanstack/react-router' {
     }
     '/api/ingest/$source': {
       id: '/api/ingest/$source'
-      path: '/$source'
+      path: '/api/ingest/$source'
       fullPath: '/api/ingest/$source'
       preLoaderRoute: typeof ApiIngestSourceRouteImport
-      parentRoute: typeof ApiIngestRoute
+      parentRoute: typeof rootRouteImport
     }
     '/demo/start/ssr/': {
       id: '/demo/start/ssr/'
@@ -279,6 +280,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiIndexerRoute: ApiIndexerRoute,
   ApiQueryRoute: ApiQueryRoute,
   ApiSummarizerRoute: ApiSummarizerRoute,
+  ApiIngestSourceRoute: ApiIngestSourceRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
   DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,

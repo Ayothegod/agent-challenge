@@ -5,8 +5,10 @@ interface UnifiedDoc {
   id: string;
   source: string; // "csv" | "pdf" | "docx"
   fileName: string;
-  title: string; // filename or document title
-  content: string; // plain text
+  canonicalTitle: string; // filename or document title
+  summary: string; // plain text
+  bullets?: string[]
+  tags?: string[]
   metadata: {
     page: number; // for pdf
     row: number; // for csv
@@ -48,8 +50,8 @@ class Transform {
         id: uuidv4(),
         source: "pdf",
         fileName: file.name as string,
-        title: cleanPdf.Title,
-        content: row,
+        canonicalTitle: cleanPdf.Title,
+        summary: row,
         metadata: {
           page: cleanPdf.totalPages,
           row: i + 1,
@@ -84,8 +86,8 @@ class Transform {
         id: uuidv4(),
         source: "csv",
         fileName: file.name as string,
-        title: Object.keys(row).join(" ").trim(),
-        content: Object.values(row).join(" "),
+        canonicalTitle: Object.keys(row).join(" ").trim(),
+        summary: Object.values(row).join(" "),
         metadata: {
           page: 1,
           row: i + 1,

@@ -1,16 +1,16 @@
 import { createTool } from "@mastra/core/tools";
-import { SummarizerOutputSchema } from "../types/index";
-import { summarizerTool } from "./summarizer";
+import { IndexerInputSchema } from "../types/index";
+// import { summarizerTool } from "./summarizer";
 import z from "zod";
 import { ContentEmbedding } from "@google/genai";
-import { prisma } from "../server/util/prisma";
-import { ai, store } from "../server/util/services";
+import { prisma } from "@/util/prisma";
+import { ai, store } from "@/util/services";
 
 export const indexerTool = createTool({
   id: "indexer-tool",
   description:
     "Generate embeddings for enriched chunks and store in vector DB + Postgres.",
-  inputSchema: SummarizerOutputSchema,
+  inputSchema: z.array(IndexerInputSchema),
   outputSchema: z.union([
     z.object({
       status: z.string(),

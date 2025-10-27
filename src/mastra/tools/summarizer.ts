@@ -8,8 +8,8 @@ import {
   SummarizerOutputSchema,
   UnifiedDoc,
 } from "../types/index";
-import { model } from "../server/util/services";
 import { createOllama } from "ollama-ai-provider-v2";
+// import { model } from "@/util/services";
 
 export const ollama = createOllama({
   baseURL: process.env.NOS_OLLAMA_API_URL || process.env.OLLAMA_API_URL,
@@ -64,7 +64,7 @@ export const summarizerTool = createTool({
     "Summarizes and enriches document chunks with bullet points, entities, and tags.",
   inputSchema: SummarizerInputSchema,
   outputSchema: SummarizerOutputSchema,
-  execute: async ({ context, runtimeContext }) => {
+  execute: async ({ context }) => {
     const { chunks } = context;
     console.log("this is summarizer tool");
 
