@@ -17,6 +17,7 @@ import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.se
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoApiNamesRouteImport } from './routes/demo/api.names'
 import { Route as ApiIngestSourceRouteImport } from './routes/api/ingest/$source'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as DemoStartSsrIndexRouteImport } from './routes/demo/start.ssr.index'
 import { Route as DemoStartSsrSpaModeRouteImport } from './routes/demo/start.ssr.spa-mode'
 import { Route as DemoStartSsrFullSsrRouteImport } from './routes/demo/start.ssr.full-ssr'
@@ -62,6 +63,11 @@ const ApiIngestSourceRoute = ApiIngestSourceRouteImport.update({
   path: '/api/ingest/$source',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoStartSsrIndexRoute = DemoStartSsrIndexRouteImport.update({
   id: '/demo/start/ssr/',
   path: '/demo/start/ssr/',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/api/indexer': typeof ApiIndexerRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -102,6 +109,7 @@ export interface FileRoutesByTo {
   '/api/indexer': typeof ApiIndexerRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -117,6 +125,7 @@ export interface FileRoutesById {
   '/api/indexer': typeof ApiIndexerRoute
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/api/indexer'
     | '/api/query'
     | '/api/summarizer'
+    | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/api/indexer'
     | '/api/query'
     | '/api/summarizer'
+    | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/api/indexer'
     | '/api/query'
     | '/api/summarizer'
+    | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
     | '/demo/start/api-request'
@@ -176,6 +188,7 @@ export interface RootRouteChildren {
   ApiIndexerRoute: typeof ApiIndexerRoute
   ApiQueryRoute: typeof ApiQueryRoute
   ApiSummarizerRoute: typeof ApiSummarizerRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiIngestSourceRoute: typeof ApiIngestSourceRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
   DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiIngestSourceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/start/ssr/': {
       id: '/demo/start/ssr/'
       path: '/demo/start/ssr'
@@ -280,6 +300,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiIndexerRoute: ApiIndexerRoute,
   ApiQueryRoute: ApiQueryRoute,
   ApiSummarizerRoute: ApiSummarizerRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiIngestSourceRoute: ApiIngestSourceRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
   DemoStartApiRequestRoute: DemoStartApiRequestRoute,
