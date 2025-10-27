@@ -1,5 +1,6 @@
-import { ApiError } from "@/util/services";
+import { httpStatus } from "@/util/constants";
 import { createFileRoute } from "@tanstack/react-router";
+import { json } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/api/summarizer")({
   server: {
@@ -20,10 +21,12 @@ export const Route = createFileRoute("/api/summarizer")({
               msg: "workflow.summarizer.completed",
               summarizerResponse: "",
             }),
-            { status: 200 }
+            { status: httpStatus.ok }
           );
         } catch (error) {
-          throw new ApiError(500, "Unknown error!");
+          return json("Unknown error! please try again.", {
+            status: httpStatus.internalServerError,
+          });
         }
       },
     },
