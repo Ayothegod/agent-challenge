@@ -11,6 +11,7 @@ export const Route = createFileRoute("/auth/login")({
 
 function RouteComponent() {
   const authClient = createAuthClient();
+  
   const signIn = async () => {
     const data = await authClient.signIn.social(
       {
