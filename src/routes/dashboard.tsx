@@ -9,6 +9,20 @@ import {
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
+    beforeLoad: ({ context,  }) => {
+    // if (!context.) {
+    //   throw new Error('Not authenticated')
+    // }
+    console.log(context);
+    
+  },
+  errorComponent: ({ error }) => {
+    if (error.message === 'Not authenticated') {
+      return <p>Hello</p>
+    }
+
+    throw error
+  },
   loader: async () => {
     const user = await requireAuth();
     return user

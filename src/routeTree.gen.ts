@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiSummarizerRouteImport } from './routes/api/summarizer'
 import { Route as ApiQueryRouteImport } from './routes/api/query'
@@ -34,6 +35,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -152,6 +160,7 @@ export interface FileRoutesById {
   '/api/query': typeof ApiQueryRoute
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -172,6 +181,7 @@ export interface FileRouteTypes {
     | '/api/query'
     | '/api/summarizer'
     | '/auth/login'
+    | '/auth/register'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -190,6 +200,7 @@ export interface FileRouteTypes {
     | '/api/query'
     | '/api/summarizer'
     | '/auth/login'
+    | '/auth/register'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -208,6 +219,7 @@ export interface FileRouteTypes {
     | '/api/query'
     | '/api/summarizer'
     | '/auth/login'
+    | '/auth/register'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -227,6 +239,7 @@ export interface RootRouteChildren {
   ApiQueryRoute: typeof ApiQueryRoute
   ApiSummarizerRoute: typeof ApiSummarizerRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiIngestSourceRoute: typeof ApiIngestSourceRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -252,6 +265,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/login': {
@@ -363,6 +383,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiQueryRoute: ApiQueryRoute,
   ApiSummarizerRoute: ApiSummarizerRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiIngestSourceRoute: ApiIngestSourceRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,
