@@ -4,23 +4,17 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  url      = "file:./dev.db"
 }
 
 model indexedChunk {
   id             String   @id @default(cuid())
   chunkId        String   @unique
   summary        String
-  bullets        String
+  bullets        String?
   canonicalTitle String
-  tags           String
-  metadata       String
+  tags           String?
+  metadata       String?
   source         String
   sourceType     String
   createdAt      DateTime @default(now())
