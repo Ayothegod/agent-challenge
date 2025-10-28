@@ -1,4 +1,4 @@
-import { prisma } from "@/util/prisma";
+import prisma from "@/util/prisma";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/api/protect")({
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/api/protect")({
         // });
         // console.log(session);
         const users = await prisma.indexedChunk.findMany({});
-        console.log(users);
+        // console.log(users);
 
         return new Response("Hello, World!");
       },
