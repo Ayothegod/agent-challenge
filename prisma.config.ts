@@ -4,9 +4,6 @@ import { PrismaLibSQL } from '@prisma/adapter-libsql'
 
 import 'dotenv/config'
 
-console.log(process.env.TURSO_AUTH_TOKEN, process.env.TURSO_DATABASE_URL);
-
-
 export default defineConfig({
   experimental: {
     adapter: true,
@@ -19,3 +16,4 @@ export default defineConfig({
     })
   }
 })
+

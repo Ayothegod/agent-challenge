@@ -8,13 +8,13 @@ datasource db {
 }
 
 model indexedChunk {
-  id             String   @id @default(cuid())
+  id             String   @id @default(cuid()) 
   chunkId        String   @unique
   summary        String
   bullets        String?
   canonicalTitle String
   tags           String?
-  metadata       String?
+  metadata       String
   source         String
   sourceType     String
   createdAt      DateTime @default(now())
@@ -23,78 +23,62 @@ model indexedChunk {
   @@index([canonicalTitle, chunkId, source])
 }
 
-// model indexedChunk {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   chunkId        String   @unique
-//   summary        String
-//   bullets        String[]
-//   canonicalTitle String
-//   tags           String[]
-//   metadata       Json
-//   source         String
-//   sourceType     String
-//   createdAt      DateTime @default(now())
-//   updatedAt      DateTime @updatedAt
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
 
-//   @@index([canonicalTitle, chunkId, source])
-// }
+  @@unique([email])
+  @@map("user")
+}
 
-// model User {
-//   id            String    @id @map("_id")
-//   name          String
-//   email         String
-//   emailVerified Boolean   @default(false)
-//   image         String?
-//   createdAt     DateTime  @default(now())
-//   updatedAt     DateTime  @default(now()) @updatedAt
-//   sessions      Session[]
-//   accounts      Account[]
+model Session {
+  id        String   @id 
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-//   @@unique([email])
-//   @@map("user")
-// }
+  @@unique([token])
+  @@map("session")
+}
 
-// model Session {
-//   id        String   @id @map("_id")
-//   expiresAt DateTime
-//   token     String
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   ipAddress String?
-//   userAgent String?
-//   userId    String
-//   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Account {
+  id                    String    @id 
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-//   @@unique([token])
-//   @@map("session")
-// }
+  @@map("account")
+}
 
-// model Account {
-//   id                    String    @id @map("_id")
-//   accountId             String
-//   providerId            String
-//   userId                String
-//   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   accessToken           String?
-//   refreshToken          String?
-//   idToken               String?
-//   accessTokenExpiresAt  DateTime?
-//   refreshTokenExpiresAt DateTime?
-//   scope                 String?
-//   password              String?
-//   createdAt             DateTime  @default(now())
-//   updatedAt             DateTime  @updatedAt
+model Verification {
+  id         String   @id 
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
 
-//   @@map("account")
-// }
-
-// model Verification {
-//   id         String   @id @map("_id")
-//   identifier String
-//   value      String
-//   expiresAt  DateTime
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @default(now()) @updatedAt
-
-//   @@map("verification")
-// }
+  @@map("verification")
+}
