@@ -25,6 +25,7 @@
     "@mastra/mongodb": "^0.14.8",
     "@prisma/adapter-libsql": "^6.18.0",
     "@prisma/client": "^6.18.0",
+    "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/nitro-v2-vite-plugin": "^1.132.31",

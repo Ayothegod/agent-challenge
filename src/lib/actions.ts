@@ -8,11 +8,31 @@ export const requireAuth = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     return context.session?.user;
   });
+  // beforeLoad: ({ context }) => {
+  //   // if (!context.) {
+  //   //   throw new Error('Not authenticated')
+  //   // }
+  // },
+  // errorComponent: ({ error }) => {
+  //   if (error.message === "Not authenticated") {
+  //     return <p>Hello</p>;
+  //   }
 
-// const {
-//   data: session,
-//   isPending,
-//   error: sessionError, //error object
-//   refetch, //refetch the session
-// } = authClient.useSession();
-// console.log(session, sessionError);
+  //   throw error;
+  // },
+  // loader: async () => {
+  //   const user = await requireAuth();
+  //   return user;
+  // },
+
+  // async function logout() {
+  //   await authClient.signOut({
+  //     fetchOptions: {
+  //       onSuccess: () => {
+  //         router.navigate({ to: "/auth/login" });
+  //       },
+  //     },
+  //   });
+  // }
+
+  
