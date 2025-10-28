@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { Brain, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -55,10 +55,10 @@ function RouteComponent() {
           callbackURL: "/dashboard",
         },
         {
-          onError: (error) => {
+          onError: () => {
             toast.error("Error: please try again.");
           },
-          onSuccess: (data) => {
+          onSuccess: () => {
             toast.success("Login successful, redirecting to /dashboard.");
           },
         }
@@ -75,7 +75,7 @@ function RouteComponent() {
           <h1 className="font-mono text-lg -mt-10">Synapse</h1>
 
           <p className="text-2xl font-medium mt-8">Welcome back!</p>
-          <label className="text-neutral-500 text-center">
+          <label className="text-neutral-500 text-center mt-2">
             Log in to reconnect with your friends and communities.
           </label>
         </div>
