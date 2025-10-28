@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserSettingsRouteImport } from './routes/user/settings'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiSummarizerRouteImport } from './routes/api/summarizer'
@@ -35,6 +36,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserSettingsRoute = UserSettingsRouteImport.update({
+  id: '/user/settings',
+  path: '/user/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
   '/demo/api/names': typeof DemoApiNamesRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -220,6 +231,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
     | '/demo/api/names'
@@ -240,6 +252,7 @@ export interface RootRouteChildren {
   ApiSummarizerRoute: typeof ApiSummarizerRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  UserSettingsRoute: typeof UserSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiIngestSourceRoute: typeof ApiIngestSourceRoute
   DemoApiNamesRoute: typeof DemoApiNamesRoute
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/user/settings': {
+      id: '/user/settings'
+      path: '/user/settings'
+      fullPath: '/user/settings'
+      preLoaderRoute: typeof UserSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/register': {
@@ -384,6 +404,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSummarizerRoute: ApiSummarizerRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  UserSettingsRoute: UserSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiIngestSourceRoute: ApiIngestSourceRoute,
   DemoApiNamesRoute: DemoApiNamesRoute,

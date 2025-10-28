@@ -32,7 +32,7 @@ export default function Sidebar() {
         </div>
 
         <div>
-          <Link to="/">
+          <Link to="/user/settings">
             <Settings className="duration-500 hover:rotate-45 text-neutral-600 hover:text-black" />
           </Link>
         </div>
