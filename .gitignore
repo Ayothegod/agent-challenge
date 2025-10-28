@@ -21,3 +21,7 @@ dev.db
 dev.db-journal
 
 prisma/migrations
+replica.db
+replica.db-info
+replica.db-shm
+replica.db-wal

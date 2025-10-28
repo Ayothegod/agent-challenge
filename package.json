@@ -11,7 +11,8 @@
     "build:agent": "mastra build",
     "gen": "prisma generate",
     "push": "prisma db push",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "turso:migrate": "turso db shell turso-prisma-db < ./prisma/migrations/20251028065824_test/migration.sql"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.23",

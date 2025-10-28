@@ -1,4 +1,3 @@
-import { auth } from "@/util/auth";
 import { prisma } from "@/util/prisma";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -18,14 +17,14 @@ export const Route = createFileRoute("/api/protect")({
       POST: async ({ request }) => {
         const users = await prisma.indexedChunk.create({
           data: {
-            summary: "this is the summary",
-            canonicalTitle: "Canon title",
+            summary: "this ssk",
+            canonicalTitle: "Canon hdja jh",
             source: "pdf.drunk",
-            chunkId: "hello-lets-go-9874",
+            chunkId: "hello--jdks-le12",
             sourceType: "drunk",
             metadata: "{name: 'hello there'}",
             bullets: "hello, fire, strength",
-            tags: "this the tags"
+            tags: "this the tags",
           },
         });
         console.log(users);

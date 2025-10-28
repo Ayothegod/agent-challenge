@@ -19,5 +19,3 @@ export default defineConfig({
     })
   }
 })
-
-// turso db shell turso-prisma-db < ./prisma/migrations/20251028065824_test/migration.sql
