@@ -1,51 +1,71 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { Brain, Loader2 } from "lucide-react";
-import { createAuthClient } from "better-auth/client";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
+import { authClient } from "@/lib/authClient";
+
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const authClient = createAuthClient();
-  const [loading, setLoading] = useState(false);
-  //   // const { toast } = useToast();
+  const router = useRouter();
+  const { data: session, isPending, error } = authClient.useSession();
 
-  const githubSignin = async () => {
-    setLoading(!loading);
-    await authClient.signIn.social(
-      {
-        newUserCallbackURL: "/welcome",
-        provider: "github",
-        errorCallbackURL: "",
-        callbackURL: "/dashboard",
-      },
-      {
-        onError: (error) => {
-          console.log("Login error: ", error);
-          // display modal
-        },
-      }
-    );
-  };
+  const [loadGithub, setLoadGithub] = useState(false);
+  const [loadGoogle, setLoadGoogle] = useState(false);
 
-  const googleSignin = async () => {
-    setLoading(!loading);
-    await authClient.signIn.social(
-      {
-        newUserCallbackURL: "/welcome",
-        provider: "google",
-        errorCallbackURL: "",
-        callbackURL: "/dashboard",
-      },
-      {
-        onError: (error) => {
-          console.log("Login error: ", error);
-          // display modal
+  const socialSignin = async (type: "github" | "google") => {
+    if (isPending) return;
+    if (error)
+      return toast.error(
+        "Error: unable to get session data, please refresh your browser."
+      );
+    if (session) {
+      toast("You are already logged-in.");
+      return router.navigate({ to: "/dashboard" });
+    }
+
+    if (type == "github") {
+      setLoadGithub(true);
+
+      await authClient.signIn.social(
+        {
+          newUserCallbackURL: "/welcome",
+          provider: "github",
+          callbackURL: "/dashboard",
         },
-      }
-    );
+        {
+          onError: () => {
+            toast.error("Error: please try again.");
+          },
+          onSuccess: () => {
+            toast.success("Login successful, redirecting to /dashboard.");
+          },
+        }
+      );
+    } else if (type == "google") {
+      setLoadGoogle(true);
+
+      await authClient.signIn.social(
+        {
+          newUserCallbackURL: "/welcome",
+          provider: "google",
+          callbackURL: "/dashboard",
+        },
+        {
+          onError: (error) => {
+            toast.error("Error: please try again.");
+          },
+          onSuccess: (data) => {
+            toast.success("Login successful, redirecting to /dashboard.");
+          },
+        }
+      );
+    } else {
+      toast.warning("Sign-in type not supported.");
+    }
   };
 
   return (
@@ -55,7 +75,7 @@ function RouteComponent() {
           <h1 className="font-mono text-lg -mt-10">Synapse</h1>
 
           <p className="text-2xl font-medium mt-8">Welcome back!</p>
-          <label className="text-neutral-500">
+          <label className="text-neutral-500 text-center">
             Log in to reconnect with your friends and communities.
           </label>
         </div>
@@ -65,19 +85,31 @@ function RouteComponent() {
             size={"lg"}
             className="w-2/3 cursor-pointer"
             variant={"outline"}
-            onClick={googleSignin}
-            disabled={loading}
+            onClick={() => socialSignin("google")}
+            disabled={loadGoogle}
           >
-            Google
+            {loadGoogle ? (
+              <div className="flex items-center gap-4 animate-pulse">
+                <Loader2 className="animate-spin" /> Google
+              </div>
+            ) : (
+              "Google"
+            )}
           </Button>
           <Button
             size={"lg"}
             className="w-2/3 cursor-pointer"
             variant={"outline"}
-            onClick={githubSignin}
-            disabled={loading}
+            onClick={() => socialSignin("github")}
+            disabled={loadGithub}
           >
-            GitHub
+            {loadGithub ? (
+              <div className="flex items-center gap-4 animate-pulse">
+                <Loader2 className="animate-spin" /> Github
+              </div>
+            ) : (
+              "Github"
+            )}
           </Button>
         </div>
 
