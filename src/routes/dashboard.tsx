@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { requireAuth } from "@/lib/actions";
 import { authClient } from "@/lib/authClient";
 import {
   createFileRoute,
@@ -8,18 +9,15 @@ import {
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
-  loader: async () => {},
+  loader: async () => {
+    const user = await requireAuth();
+    return user
+  },
 });
 
 function RouteComponent() {
+  const user = Route.useLoaderData()
   const router = useRouter();
-  const {
-    data: session,
-    isPending,
-    error: sessionError, //error object
-    refetch, //refetch the session
-  } = authClient.useSession();
-  console.log(session, sessionError);
 
   async function logout() {
     await authClient.signOut({
@@ -31,7 +29,7 @@ function RouteComponent() {
     });
   }
 
-  if (sessionError) {
+  if (!user) {
     return <div>You dont have a session</div>;
   }
 
