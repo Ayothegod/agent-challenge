@@ -27,6 +27,8 @@ function RouteComponent() {
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
+      <Sidebar/>
+
       <div className="p-3 h-max w-max">
         <Link to="/dashboard" className="">
           <div className="flex font-medium">
@@ -37,7 +39,7 @@ function RouteComponent() {
       </div>
 
       <div className="w-full flex items-start justify-center mt-24 px-8">
-        <div className="w-full sm:w-2/3 md:w-1/2">
+        <div className="w-full sm:w-2/3">
           <div className="space-y-2">
             <h1 className="font-semibold text-xl">Account Settings</h1>
             <p className="text-neutral-600">Manage your account information</p>

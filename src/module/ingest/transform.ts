@@ -19,7 +19,7 @@ interface UnifiedDoc {
   };
 }
 
-function chunkText(text: string, maxLength = 600) {
+function chunkText(text: string, maxLength = 800) {
   const lines = text.split(/\n+/); // split on one or more newlines
   const chunks = [];
   let current = "";

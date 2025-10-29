@@ -11,7 +11,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-full bg-white w-[30%] shadow-sm flex flex-col">
+    <div className="h-full bg-white min-w-[30%] max-w-[30%] shadow-sm flex flex-col">
       <div className="flex items-center p-3 text-lg font-bold font-mono gap-2">
         <Brain /> <p>Synapse</p>
       </div>
@@ -19,7 +19,7 @@ export default function Sidebar() {
 
       <div className="flex-1">Middle</div>
 
-      <div className="h-24 border">Middle</div>
+      <div className="h-24 border mx-2 bg-neutral-100 rounded my-3">Bottom</div>
 
       <div className="mt-auto py-2 px-3 flex justify-between items-center">
         <div className="flex items-center gap-2">
