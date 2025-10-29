@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
+  loader: () => {},
 });
 
 function RouteComponent() {
@@ -10,7 +11,7 @@ function RouteComponent() {
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
-      <Sidebar/>
+      <Sidebar />
     </div>
   );
 }
