@@ -18,22 +18,6 @@ export const getDocumentNodes = createServerFn({ method: "GET" })
     })
     return 
   });
-// beforeLoad: ({ context }) => {
-//   // if (!context.) {
-//   //   throw new Error('Not authenticated')
-//   // }
-// },
-// errorComponent: ({ error }) => {
-//   if (error.message === "Not authenticated") {
-//     return <p>Hello</p>;
-//   }
-
-//   throw error;
-// },
-// loader: async () => {
-//   const user = await requireAuth();
-//   return user;
-// },
 
 // async function logout() {
 //   await authClient.signOut({

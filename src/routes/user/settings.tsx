@@ -164,6 +164,7 @@ Settings
 
 
 Synapse — Distributed Knowledge for Teams that Think.
+Your AI workspace for files and ideas.
 
 Add default/demo accounts or quick “Generate Demo Data” button.
 Record a 1-min demo walkthrough to confirm flow feels tight.

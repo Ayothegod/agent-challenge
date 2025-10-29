@@ -20,7 +20,7 @@ export default function Sidebar() {
   };
 
   return (
-    <div className="h-full bg-white min-w-[15%] max-w-[30%] shadow-sm flex flex-col">
+    <div className="hidden h-full bg-white sm:min-w-64 md:min-w-80 shadow-sm sm:flex flex-col">
       <div className="flex items-center p-3 text-lg font-bold font-mono gap-2">
         <Brain /> <p>Synapse</p>
       </div>
