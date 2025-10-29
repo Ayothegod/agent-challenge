@@ -4,7 +4,7 @@ import { MongoDBVector } from "@mastra/mongodb";
 
 export const model = google("gemini-2.0-flash");
 
-class ApiResponse {
+export class ApiResponse {
   statusCode: number;
   data: any;
   message: string;
@@ -19,7 +19,7 @@ class ApiResponse {
   }
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   statusCode: number;
   data: null;
   success: boolean;
@@ -46,13 +46,18 @@ class ApiError extends Error {
   }
 }
 
-const ai = new GoogleGenAI({
+export const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
 });
 
-const store = new MongoDBVector({
+export const store = new MongoDBVector({
   uri: process.env.MONGODB_URI as string,
   dbName: process.env.MONGODB_DATABASE as string,
 });
 
-export { ApiResponse, ApiError, ai, store };
+export type ErrorProps = {
+  error: unknown;
+  reset?: () => void;
+  showStack?: boolean;
+};
+

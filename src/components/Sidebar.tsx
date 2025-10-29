@@ -5,19 +5,41 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Brain, Settings } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { authClient } from "@/lib/authClient";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
 
-export default function Sidebar() {
-  const user = {
-    name: "Ayomide Adebisi",
-    email: "heyayomideadebisi@gmail.com",
-    image: "https://avatars.githubusercontent.com/u/106715410?v=4",
-    id: "vYvhndnKgeBFYyWgFOR4EZkNf2QVR305",
-  };
+type User = {
+  name: string;
+  email: string;
+  emailVerified: boolean;
+  image?: string | null | undefined;
+  createdAt: Date;
+  updatedAt: Date;
+  id: string;
+};
+
+export default function Sidebar({ user }: { user: User | undefined }) {
+  const router = useRouter();
+
+  async function logout() {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Log-out successful.");
+          router.navigate({ to: "/auth/login" });
+        },
+        onError: () => {
+          toast.error("Error while trying to log-out.");
+        },
+      },
+    });
+  }
 
   return (
     <div className="hidden h-full bg-white sm:min-w-64 md:min-w-80 shadow-sm sm:flex flex-col">
@@ -35,12 +57,12 @@ export default function Sidebar() {
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-2 cursor-pointer">
               <img
-                src={user.image}
-                alt={`${user.name} profile image`}
+                src={user?.image as string}
+                alt={`${user?.name} profile image`}
                 className="h-8 w-8 rounded-full"
               />
               <p className="font-semibold font-mono">
-                {user.name.split(" ")[0]}
+                {user?.name.split(" ")[0]}
               </p>
             </div>
           </DropdownMenuTrigger>
@@ -49,15 +71,15 @@ export default function Sidebar() {
             <DropdownMenuGroup>
               <div className="flex items-center gap-3 cursor-pointer py-4">
                 <img
-                  src={user.image}
-                  alt={`${user.name} profile image`}
+                  src={user?.image as string}
+                  alt={`${user?.name} profile image`}
                   className="h-12 w-12 rounded-full"
                 />
                 <div className="flex flex-col items-start">
                   <DropdownMenuLabel className="p-0 text-base">
-                    {user.name.split(" ")[0]}
+                    {user?.name.split(" ")[0]}
                   </DropdownMenuLabel>
-                  <p className="text-sm">{user.email}</p>
+                  <p className="text-sm">{user?.email}</p>
                 </div>
               </div>
             </DropdownMenuGroup>
@@ -77,9 +99,12 @@ export default function Sidebar() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
-            <p className="text-red-600 text-sm px-2 py-1.5 rounded-md font-medium hover:bg-red-100">
+            <button
+              className="text-red-600 text-sm px-2 py-1.5 rounded-md font-medium hover:bg-red-100 w-full text-left cursor-pointer"
+              onClick={logout}
+            >
               Log out
-            </p>
+            </button>
           </DropdownMenuContent>
         </DropdownMenu>
 

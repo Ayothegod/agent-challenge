@@ -73,7 +73,42 @@ function RouteComponent() {
           </section>
         </div>
       </div>
-      {/* Query ->
+      {/*
+Active User / With Uploaded Docs
+
+Goal: Feels like a smart workspace or dashboard.
+Layout:
+
+Sidebar (left):
+
+User info/profile
+
+Tabs: Home, Uploads, Chats, Settings
+
+Main area:
+
+Top bar: Search input (“Ask anything about your files…”), quick upload button.
+
+Document grid or list:
+
+Each document shows name, file type, upload date, and status.
+
+Hover or click reveals actions: “Open Chat,” “Delete,” “View Details.”
+
+Right panel or modal (when chatting):
+
+Chat interface tied to selected document(s).
+
+Messages on left/right bubbles.
+
+Input box: “Ask about this document…”
+
+Option to attach or switch docs mid-chat.
+
+Vibe: Feels like Notion + ChatGPT + Drive — organized, intelligent, approachable.   
+      
+      
+      Query ->
       -> answer
       -> provenance > list of chunk titles, source links, confidence score
       -> agent trace 
