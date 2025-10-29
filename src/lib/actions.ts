@@ -6,7 +6,6 @@ import prisma from "@/util/prisma";
 export const requireAuth = createServerFn({ method: "GET" })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    throw new Error("Unable to get context data");
     return context.session?.user;
   });
 

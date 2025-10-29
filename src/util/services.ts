@@ -1,6 +1,7 @@
 import { google } from "@ai-sdk/google";
 import { GoogleGenAI } from "@google/genai";
 import { MongoDBVector } from "@mastra/mongodb";
+import { PineconeVector } from '@mastra/pinecone'
 
 export const model = google("gemini-2.0-flash");
 
@@ -50,10 +51,9 @@ export const ai = new GoogleGenAI({
   apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
 });
 
-export const store = new MongoDBVector({
-  uri: process.env.MONGODB_URI as string,
-  dbName: process.env.MONGODB_DATABASE as string,
-});
+export const store = new PineconeVector({
+  apiKey: process.env.PINECONE_API_KEY as string,
+})
 
 export type ErrorProps = {
   error: unknown;

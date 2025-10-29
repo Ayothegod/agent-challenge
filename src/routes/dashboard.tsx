@@ -44,6 +44,8 @@ export const Route = createFileRoute("/dashboard")({
 
 function RouteComponent() {
   const user = Route.useLoaderData();
+  // console.log(user);
+  
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">

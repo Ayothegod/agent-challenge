@@ -1,33 +1,37 @@
 import Sidebar from "@/components/Sidebar";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { requireAuth } from "@/lib/actions";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 
 export const Route = createFileRoute("/user/settings")({
   component: RouteComponent,
-  // beforeLoad: ({ context }) => {
-  //   // if (!context.) {
-  //   //   throw new Error('Not authenticated')
-  //   // }
-  // },
-  // errorComponent: ({ error }) => {
+  loader: async () => {
+    try {
+      const user = await requireAuth();
+      if (!user) redirect({ to: "/auth/login" });
+      return user;
+    } catch (error: any) {
+      // console.log({ "Catch error": error });
+      throw new Error(error);
+    }
+  },
+  // errorComponent: ({ error, reset }) => {
   //   if (error.message === "Not authenticated") {
-  //     return <login/>
+  //     redirect({ to: "/auth/login" });
   //   }
+
+  //   return <DasboardError error={error} reset={reset} />;
+  // },
 });
 
 function RouteComponent() {
-  const user = {
-    name: "Ayomide Adebisi",
-    email: "heyayomideadebisi@gmail.com",
-    image: "https://avatars.githubusercontent.com/u/106715410?v=4",
-    id: "vYvhndnKgeBFYyWgFOR4EZkNf2QVR305",
-  };
+  const user = Route.useLoaderData();
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
-      <Sidebar />
+      <Sidebar user={user} />
 
       <div className="p-3 h-max w-max">
         <Link to="/dashboard" className="">
@@ -48,8 +52,8 @@ function RouteComponent() {
           <section className="bg-white mt-8 rounded-md shadow-sm px-6 py-10">
             <div className="flex items-center justify-center">
               <img
-                src={user.image}
-                alt={`${user.image} image`}
+                src={user?.image as string}
+                alt={`${user?.image} image`}
                 className="h-48 w-48 rounded-full"
               />
             </div>
@@ -57,22 +61,24 @@ function RouteComponent() {
             <div className="flex flex-col gap-8 mt-8">
               <div>
                 <Label className="text-neutral-600">Username</Label>
-                <p className="font-medium text-lg">{user.name.split(" ")[0]}</p>
+                <p className="font-medium text-lg">{user?.name.split(" ")[0]}</p>
               </div>
               <Separator className="" />
               <div>
                 <Label className="text-neutral-600">Full Name</Label>
-                <p className="font-medium text-lg">{user.name}</p>
+                <p className="font-medium text-lg">{user?.name}</p>
               </div>
               <Separator className="" />
               <div>
                 <Label className="text-neutral-600">Email</Label>
-                <p className="font-medium text-lg">{user.email}</p>
+                <p className="font-medium text-lg">{user?.email}</p>
               </div>
             </div>
           </section>
         </div>
       </div>
+
+
       {/*
 Active User / With Uploaded Docs
 
@@ -203,6 +209,13 @@ Your AI workspace for files and ideas.
 
 Add default/demo accounts or quick “Generate Demo Data” button.
 Record a 1-min demo walkthrough to confirm flow feels tight.
+
+
+// POST /upload — upload doc → emits event.
+// GET /query?q= — query the brain.
+// GET /logs — agent logs.
+// GET /graph — data graph snapshot.
+// Add JWT auth + rate limiting + role control later.
 */}
     </div>
   );

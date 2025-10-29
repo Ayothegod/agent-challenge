@@ -11,8 +11,8 @@ export interface UnifiedDoc {
   fileName: string;
   canonicalTitle: string; // filename or document title
   summary: string; // plain text
-  bullets?: string[]
-  tags?: string[]
+  bullets?: string[];
+  tags?: string[];
   metadata: {
     page: number; // for pdf
     row: number; // for csv
@@ -40,8 +40,10 @@ export const UnifiedDocsSchema = z.array(
     id: z.string().describe("City name"),
     source: z.string().describe("Specific source of document for chunk"),
     fileName: z.string().describe("Filename for chunk object"),
-    title: z.string().describe("Chunk title"), // filename or document title
-    content: z.string().describe("Chunk content"), // plain text
+    canonicalTitle: z.string().describe("Chunk title"), 
+    summary: z.string().describe("Chunk content"), // plain text
+    bullets: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
     metadata: z.object({
       page: z.number().describe("Document page number (for PDF)"),
       row: z.number().describe("CSV row number"),

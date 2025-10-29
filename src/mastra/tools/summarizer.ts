@@ -9,7 +9,6 @@ import {
   UnifiedDoc,
 } from "../types/index";
 import { createOllama } from "ollama-ai-provider-v2";
-// import { model } from "@/util/services";
 
 export const ollama = createOllama({
   baseURL: process.env.NOS_OLLAMA_API_URL || process.env.OLLAMA_API_URL,
@@ -79,8 +78,8 @@ export const summarizerTool = createTool({
       const batchPrompt = batch
         .map(
           (chunk) => `
-      Title: ${chunk.title}
-      Content: ${chunk.content}
+      Title: ${chunk.canonicalTitle}
+      Content: ${chunk.summary}
       Source: ${chunk.source}
 `
         )

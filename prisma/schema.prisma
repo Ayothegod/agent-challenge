@@ -7,8 +7,8 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-model indexedChunk {
-  id             String   @id @default(cuid()) 
+model IndexedChunk {
+  id             String   @id @default(cuid())
   chunkId        String   @unique
   summary        String
   bullets        String?
@@ -19,29 +19,30 @@ model indexedChunk {
   sourceType     String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  
-
-  @@index([canonicalTitle, chunkId, source])
+  @@index([canonicalTitle, chunkId, source, userId])
 }
 
 model User {
-  id            String    @id
+  id            String        @id
   name          String
   email         String
-  emailVerified Boolean   @default(false)
+  emailVerified Boolean       @default(false)
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  indexedChunk  IndexedChunk[]
 
   @@unique([email])
   @@map("user")
 }
 
 model Session {
-  id        String   @id 
+  id        String   @id
   expiresAt DateTime
   token     String
   createdAt DateTime @default(now())
@@ -56,7 +57,7 @@ model Session {
 }
 
 model Account {
-  id                    String    @id 
+  id                    String    @id
   accountId             String
   providerId            String
   userId                String
@@ -75,7 +76,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id 
+  id         String   @id
   identifier String
   value      String
   expiresAt  DateTime

@@ -12,7 +12,7 @@
     "gen": "prisma generate",
     "push": "prisma db push",
     "migrate": "prisma migrate dev",
-    "turso:migrate": "turso db shell synapse-db < ./prisma/migrations/20251028160947_init/migration.sql"
+    "turso:migrate": "turso db shell synapse-db < ./prisma/migrations/20251029203323_add_user_id_indexedchunk/migration.sql"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.23",
@@ -23,6 +23,7 @@
     "@mastra/loggers": "^0.10.18",
     "@mastra/memory": "^0.15.9",
     "@mastra/mongodb": "^0.14.8",
+    "@mastra/pinecone": "^0.11.15",
     "@prisma/adapter-libsql": "^6.18.0",
     "@prisma/client": "^6.18.0",
     "@radix-ui/react-alert-dialog": "^1.1.15",

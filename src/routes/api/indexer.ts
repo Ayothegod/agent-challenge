@@ -1,5 +1,5 @@
+import { indexerTool } from "@/mastra/tools/indexer-tool";
 import { httpStatus } from "@/util/constants";
-import prisma from "@/util/prisma";
 import { createFileRoute } from "@tanstack/react-router";
 import { json } from "@tanstack/react-start";
 
@@ -9,17 +9,14 @@ export const Route = createFileRoute("/api/indexer")({
       POST: async ({ request }) => {
         try {
           const body = await request.json();
-          // console.log(body);
 
-          // const toolResult = await indexerTool.execute({
-          //   context: body,
-          //   runtimeContext: {} as any,
-          // });
-          const users = await prisma.indexedChunk.findMany({});
-          console.log(users);
+          const toolResult = await indexerTool.execute({
+            context: body,
+            runtimeContext: {} as any,
+          });
 
           return json(
-            { msg: "workflow.indexer.completed", toolResult: "" },
+            { msg: "workflow.indexer.completed", toolResult},
             { status: httpStatus.ok }
           );
         } catch (error) {
