@@ -12,7 +12,7 @@
     "gen": "prisma generate",
     "push": "prisma db push",
     "migrate": "prisma migrate dev",
-    "turso:migrate": "turso db shell synapse-db < ./prisma/migrations/20251029203323_add_user_id_indexedchunk/migration.sql"
+    "turso:migrate": "turso db shell synapse-db < ./prisma/migrations/20251030074813_add_chat_message/migration.sql"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.23",
@@ -34,6 +34,8 @@
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/nitro-v2-vite-plugin": "^1.132.31",
     "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.90.5",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "@tanstack/react-router": "^1.132.0",
     "@tanstack/react-router-devtools": "^1.132.0",
     "@tanstack/react-router-ssr-query": "^1.131.7",
@@ -53,6 +55,7 @@
     "prisma": "^6.18.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "redaxios": "^0.5.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.0.6",

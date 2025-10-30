@@ -25,17 +25,39 @@ model IndexedChunk {
   @@index([canonicalTitle, chunkId, source, userId])
 }
 
+model Chat {
+  id       String    @id @default(cuid())
+  title    String
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id           String   @id @default(cuid())
+  userContent  String
+  agentContent String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  chatId       String
+  Chat         Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
 model User {
-  id            String        @id
+  id            String         @id
   name          String
   email         String
-  emailVerified Boolean       @default(false)
+  emailVerified Boolean        @default(false)
   image         String?
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @default(now()) @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
   indexedChunk  IndexedChunk[]
+  chats         Chat[]
 
   @@unique([email])
   @@map("user")

@@ -77,23 +77,39 @@ function RouteComponent() {
     setTimeout(() => setCountdown(false), 3000);
   };
 
+  const chats = [""];
+
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
       <Sidebar user={user} />
 
       <section className="border w-full">
         <Empty className="w-full">
-          <LucideFolderOpen />
-          <EmptyTitle>No Documents Yet</EmptyTitle>
+          {chats.length < 1 ? (
+            <>
+              <LucideFolderOpen />
+              <EmptyTitle>No Documents Yet</EmptyTitle>
+            </>
+          ) : (
+            <div>
+              <div className="flex items-center gap-2">
+                <p>You have uploaded the following documents</p>
+                <LucideFolderOpen />
+              </div>
+              <p>ayomide.pdf</p>
+            </div>
+          )}
 
           <h2 className="text-2xl font-mono font-semibold">
             Hi Ayomide. Ready to Dive Into Knowledge?
           </h2>
 
-          <EmptyDescription>
-            You haven&apos;t uploaded any projects yet. Get started by adding
-            your first document.
-          </EmptyDescription>
+          {chats.length < 1 && (
+            <EmptyDescription>
+              You haven&apos;t uploaded any projects yet. Get started by adding
+              your first document.
+            </EmptyDescription>
+          )}
         </Empty>
 
         <div
