@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserSettingsRouteImport } from './routes/user/settings'
+import { Route as CChatIdRouteImport } from './routes/c/$chatId'
 import { Route as AuthRegisterRouteImport } from './routes/auth/register'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as ApiSummarizerRouteImport } from './routes/api/summarizer'
@@ -41,6 +42,11 @@ const IndexRoute = IndexRouteImport.update({
 const UserSettingsRoute = UserSettingsRouteImport.update({
   id: '/user/settings',
   path: '/user/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CChatIdRoute = CChatIdRouteImport.update({
+  id: '/c/$chatId',
+  path: '/c/$chatId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRegisterRoute = AuthRegisterRouteImport.update({
@@ -128,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/c/$chatId': typeof CChatIdRoute
   '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/c/$chatId': typeof CChatIdRoute
   '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/api/summarizer': typeof ApiSummarizerRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
+  '/c/$chatId': typeof CChatIdRoute
   '/user/settings': typeof UserSettingsRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/ingest/$source': typeof ApiIngestSourceRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/c/$chatId'
     | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/c/$chatId'
     | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
@@ -231,6 +242,7 @@ export interface FileRouteTypes {
     | '/api/summarizer'
     | '/auth/login'
     | '/auth/register'
+    | '/c/$chatId'
     | '/user/settings'
     | '/api/auth/$'
     | '/api/ingest/$source'
@@ -252,6 +264,7 @@ export interface RootRouteChildren {
   ApiSummarizerRoute: typeof ApiSummarizerRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthRegisterRoute: typeof AuthRegisterRoute
+  CChatIdRoute: typeof CChatIdRoute
   UserSettingsRoute: typeof UserSettingsRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiIngestSourceRoute: typeof ApiIngestSourceRoute
@@ -285,6 +298,13 @@ declare module '@tanstack/react-router' {
       path: '/user/settings'
       fullPath: '/user/settings'
       preLoaderRoute: typeof UserSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/c/$chatId': {
+      id: '/c/$chatId'
+      path: '/c/$chatId'
+      fullPath: '/c/$chatId'
+      preLoaderRoute: typeof CChatIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/register': {
@@ -404,6 +424,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiSummarizerRoute: ApiSummarizerRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthRegisterRoute: AuthRegisterRoute,
+  CChatIdRoute: CChatIdRoute,
   UserSettingsRoute: UserSettingsRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiIngestSourceRoute: ApiIngestSourceRoute,

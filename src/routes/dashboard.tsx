@@ -11,9 +11,10 @@ import {
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import { LucideFolderOpen } from "lucide-react";
+import { LucideFolderOpen, MessagesSquareIcon, Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 const formatBytes = (bytes: number) => {
   if (bytes === 0) return "0 B";
@@ -25,7 +26,7 @@ const formatBytes = (bytes: number) => {
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
-  loader: async () => {
+  loader: async ({ context }) => {
     try {
       const user = await requireAuth();
       if (!user) redirect({ to: "/auth/login" });
@@ -45,8 +46,13 @@ export const Route = createFileRoute("/dashboard")({
   },
 });
 
+const startChat = () => {
+  // uuidv4()
+};
+
 function RouteComponent() {
   const user = Route.useLoaderData();
+  const router = useRouter();
   const [file, setFile] = useState<File | null>(null);
   const [countdown, setCountdown] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -78,6 +84,10 @@ function RouteComponent() {
   };
 
   const chats = [""];
+
+  const startChat = () => {
+    return router.navigate({ to: "/c/$chatId", params: { chatId: uuidv4() } });
+  };
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
@@ -112,20 +122,32 @@ function RouteComponent() {
           )}
         </Empty>
 
-        <div
-          className="flex items-center justify-center cursor-pointer"
-          onClick={() => hiddenInput.current?.click()}
-        >
-          <div className="shadow bg-white rounded my-3 p-6 w-96 text-center">
-            <h2 className="font-mono font-semibold">Start with files</h2>
-            <p>Upload, analyse and uncover key insights in your data</p>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-w-3xl mx-auto px-10 ">
+          <div
+            className="shadow bg-blue-100 rounded my-3 p-6 w-full text-center flex items-center flex-col cursor-pointer"
+            onClick={startChat}
+          >
+            <MessagesSquareIcon className="h-10 w-20 mb-4" />
+            <h2 className="font-mono font-semibold">Start chat</h2>
+            <p>Start querying and analysing your data</p>
           </div>
-          <input
-            type="file"
-            ref={hiddenInput}
-            className="hidden"
-            onChange={handleFile}
-          />
+
+          <div
+            className="flex items-center justify-center cursor-pointer"
+            onClick={() => hiddenInput.current?.click()}
+          >
+            <div className="shadow bg-yellow-100 rounded my-3 p-6 w-full text-center flex flex-col items-center">
+              <LucideFolderOpen className="h-10 w-20 mb-4" />
+              <h2 className="font-mono font-semibold">Upload files</h2>
+              <p>Upload, analyse and uncover key insights in your data</p>
+            </div>
+            <input
+              type="file"
+              ref={hiddenInput}
+              className="hidden"
+              onChange={handleFile}
+            />
+          </div>
         </div>
 
         {file && (
