@@ -1,24 +1,27 @@
 import Sidebar from "@/components/Sidebar";
+import { Button } from "@/components/ui/button";
+import { Empty, EmptyDescription, EmptyTitle } from "@/components/ui/empty";
+import { UploadCountdown } from "@/components/UploadCountdown";
+import { requireAuth } from "@/lib/actions";
+import { authClient } from "@/lib/authClient";
+import { ErrorProps } from "@/util/services";
 import {
   createFileRoute,
   ErrorComponentProps,
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { LucideFolderOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { requireAuth } from "@/lib/actions";
-import { authClient } from "@/lib/authClient";
-import { ErrorProps } from "@/util/services";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+
+const formatBytes = (bytes: number) => {
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
@@ -44,8 +47,35 @@ export const Route = createFileRoute("/dashboard")({
 
 function RouteComponent() {
   const user = Route.useLoaderData();
-  // console.log(user);
-  
+  const [file, setFile] = useState<File | null>(null);
+  const [countdown, setCountdown] = useState(false);
+  const [finished, setFinished] = useState(false);
+
+  const hiddenInput = useRef<HTMLInputElement>(null);
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) setFile(file);
+  };
+
+  const uploadDocument = async () => {
+    if (!file) return;
+
+    setCountdown(true);
+    setFinished(false);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    const source = file.type.split("/")[1];
+
+    const res = await fetch(`/api/ingest/${source}`, {
+      method: "POST",
+      body: formData,
+    }).then((r) => r.json());
+
+    console.log(res);
+    setFinished(true);
+    setTimeout(() => setCountdown(false), 3000);
+  };
 
   return (
     <div className="flex w-full bg-neutral-100 h-screen">
@@ -66,19 +96,62 @@ function RouteComponent() {
           </EmptyDescription>
         </Empty>
 
-        <div className="flex items-center justify-center cursor-pointer">
+        <div
+          className="flex items-center justify-center cursor-pointer"
+          onClick={() => hiddenInput.current?.click()}
+        >
           <div className="shadow bg-white rounded my-3 p-6 w-96 text-center">
             <h2 className="font-mono font-semibold">Start with files</h2>
             <p>Upload, analyse and uncover key insights in your data</p>
           </div>
+          <input
+            type="file"
+            ref={hiddenInput}
+            className="hidden"
+            onChange={handleFile}
+          />
         </div>
+
+        {file && (
+          <div className="flex items-center justify-center">
+            <div className="shadow bg-white rounded my-3 p-6 w-96 text-left space-y-4">
+              <h3 className="font-mono font-semibold text-center">
+                File Details
+              </h3>
+
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="font-medium">Name:</span>
+                <span>{file.name}</span>
+              </div>
+
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="font-medium">Size:</span>
+                <span>{formatBytes(file.size)}</span>
+              </div>
+
+              <div className="flex justify-between items-center border-b pb-2">
+                <span className="font-medium">Type:</span>
+                <span>{file.type}</span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Last Modified:</span>
+                <span>{new Date(file.lastModified).toLocaleString()}</span>
+              </div>
+
+              <Button
+                className="mt-4 w-full font-mono cursor-pointer"
+                size="lg"
+                onClick={uploadDocument}
+              >
+                Start Upload
+              </Button>
+            </div>
+          </div>
+        )}
       </section>
-      {/* 
-      NOTE: upload document
-      - check size of document
-      - free plan have a max no of documents
-      - give an estimate on upload state
-      */}
+
+      {countdown && <UploadCountdown finished={finished} file={file} />}
     </div>
   );
 }

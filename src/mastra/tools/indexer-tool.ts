@@ -125,8 +125,7 @@ export const indexerTool = createTool({
 
     const results = await Promise.allSettled(ops);
     console.timeEnd("Total upsert + create time");
-    
-    console.log({ results });
+    // console.log({ results });
 
     const indexed = results.filter((r) => r.status === "fulfilled").length;
     const errors = results

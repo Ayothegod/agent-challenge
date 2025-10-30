@@ -1,7 +1,7 @@
 import { google } from "@ai-sdk/google";
 import { GoogleGenAI } from "@google/genai";
 import { MongoDBVector } from "@mastra/mongodb";
-import { PineconeVector } from '@mastra/pinecone'
+import { PineconeVector } from "@mastra/pinecone";
 
 export const model = google("gemini-2.0-flash");
 
@@ -10,7 +10,7 @@ export class ApiResponse {
   data: any;
   message: string;
   success: boolean;
-  
+
   constructor(statusCode: number, data: any, message = "Success") {
     this.statusCode = statusCode;
     this.data = data;
@@ -53,7 +53,7 @@ export const ai = new GoogleGenAI({
 
 export const store = new PineconeVector({
   apiKey: process.env.PINECONE_API_KEY as string,
-})
+});
 
 export type ErrorProps = {
   error: unknown;

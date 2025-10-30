@@ -7,12 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { authClient } from "@/lib/authClient";
 import { Link, useRouter } from "@tanstack/react-router";
 import { Brain, Settings } from "lucide-react";
-import { Separator } from "./ui/separator";
-import { authClient } from "@/lib/authClient";
-import { Button } from "./ui/button";
 import { toast } from "sonner";
+import { Separator } from "./ui/separator";
 
 type User = {
   name: string;

@@ -61,7 +61,9 @@ function RouteComponent() {
             <div className="flex flex-col gap-8 mt-8">
               <div>
                 <Label className="text-neutral-600">Username</Label>
-                <p className="font-medium text-lg">{user?.name.split(" ")[0]}</p>
+                <p className="font-medium text-lg">
+                  {user?.name.split(" ")[0]}
+                </p>
               </div>
               <Separator className="" />
               <div>
@@ -77,7 +79,6 @@ function RouteComponent() {
           </section>
         </div>
       </div>
-
 
       {/*
 Active User / With Uploaded Docs
@@ -216,6 +217,12 @@ Record a 1-min demo walkthrough to confirm flow feels tight.
 // GET /logs — agent logs.
 // GET /graph — data graph snapshot.
 // Add JWT auth + rate limiting + role control later.
+
+      NOTE: upload document
+      - check size of document
+      - free plan have a max no of documents
+      - give an estimate on upload state
+
 */}
     </div>
   );
