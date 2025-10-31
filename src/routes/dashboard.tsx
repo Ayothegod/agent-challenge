@@ -76,11 +76,30 @@ function RouteComponent() {
     const res = await fetch(`/api/ingest/${source}`, {
       method: "POST",
       body: formData,
-    }).then((r) => r.json());
+    });
 
-    console.log(res);
+    if (!res.ok) {
+      setCountdown(false);
+      const message = await res.json();
+      return toast.error(`${message}`);
+    }
+
+    const data = await res.json();
     setFinished(true);
     setTimeout(() => setCountdown(false), 3000);
+
+    // errors
+    // :
+    // []
+    // indexed
+    // :
+    // 5
+    // skipped
+    // :
+    // 0
+    // status
+    // :
+    // "success"
   };
 
   const chats = [""];
@@ -93,7 +112,7 @@ function RouteComponent() {
     <div className="flex w-full bg-neutral-100 h-screen">
       <Sidebar user={user} />
 
-      <section className="border w-full">
+      <section className="border w-full relative">
         <Empty className="w-full">
           {chats.length < 1 ? (
             <>
@@ -187,9 +206,8 @@ function RouteComponent() {
             </div>
           </div>
         )}
+        {countdown && <UploadCountdown finished={finished} file={file} />}
       </section>
-
-      {countdown && <UploadCountdown finished={finished} file={file} />}
     </div>
   );
 }

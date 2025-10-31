@@ -3,7 +3,8 @@ import { IndexerInputSchema } from "../types/index";
 import z from "zod";
 import { ContentEmbedding } from "@google/genai";
 import prisma from "@/util/prisma";
-import { ai, store } from "@/util/services";
+import { ai, ApiError, hashSummary, store } from "@/util/services";
+import { httpStatus } from "@/util/constants";
 
 export const indexerTool = createTool({
   id: "indexer-tool",
@@ -23,43 +24,55 @@ export const indexerTool = createTool({
     z.object({ msg: z.string().describe("No chunk available output") }),
   ]),
   execute: async ({ context }) => {
-    const indexName = "chunk-summary";
+    const indexName = "new-chunk-summary";
     const dimension = 768;
     const chunks = context.chunks;
     const userId = context.userId;
 
     if (!userId)
-      return {
-        msg: "No userID associated with this operation, please provide a userId.",
-      };
+      throw new ApiError(
+        httpStatus.badRequest,
+        "No userID associated with this operation, please provide a userId."
+      );
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
     });
-    console.log(user);
 
     if (!user)
-      return {
-        msg: "This user does not exists, create an account to get started.",
-      };
+      throw new ApiError(
+        httpStatus.unauthorized,
+        "This user does not exists, create an account to get started."
+      );
 
     if (!chunks)
-      return { msg: "No chunks available, please input chunk data." };
+      throw new ApiError(
+        httpStatus.notFound,
+        "No chunks available, please input chunk data."
+      );
+
+    const chunksWithHash = chunks.map((c) => ({
+      ...c,
+      hash: hashSummary(c.summary),
+    }));
 
     const existing = await prisma.indexedChunk.findMany({
-      where: { chunkId: { in: chunks.map((c) => c.id) } },
-      select: { chunkId: true },
+      where: { hash: { in: chunksWithHash.map((c) => c.hash) } },
+      select: { hash: true },
     });
-    const existingIds = new Set(existing.map((e) => e.chunkId));
-    const newChunks = chunks.filter((c) => !existingIds.has(c.id));
-    console.log({ existing, existingIds, newChunks });
+
+    const existingHashes = new Set(existing.map((e) => e.hash));
+    const newChunks = chunksWithHash.filter((c) => !existingHashes.has(c.hash));
+    console.log({ existing, existingHashes, newChunks });
 
     if (newChunks.length < 1)
-      return { msg: "The current chunks are already indexed." };
+      throw new ApiError(
+        httpStatus.notFound,
+        "The current chunks are already indexed."
+      );
 
     const response = await ai.models.embedContent({
       model: "gemini-embedding-001",
-      // contents: newChunks.map((c) => c.summary),
       contents: newChunks.map((c) =>
         [c.canonicalTitle, c.summary, c.bullets?.join(". ")]
           .filter(Boolean)
@@ -91,6 +104,7 @@ export const indexerTool = createTool({
             summary: chunk.summary,
             bullets: chunk.bullets,
             title: chunk.canonicalTitle,
+            hash: hashSummary(chunk.summary),
             tags: chunk.tags,
             createdAt: new Date(),
             userId,
@@ -107,6 +121,7 @@ export const indexerTool = createTool({
           summary: chunk.summary,
           source: chunk.fileName,
           sourceType: chunk.source,
+          hash: hashSummary(chunk.summary),
           metadata: JSON.stringify(chunk.metadata),
           userId,
         },
@@ -125,7 +140,6 @@ export const indexerTool = createTool({
 
     const results = await Promise.allSettled(ops);
     console.timeEnd("Total upsert + create time");
-    // console.log({ results });
 
     const indexed = results.filter((r) => r.status === "fulfilled").length;
     const errors = results

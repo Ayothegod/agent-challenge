@@ -21,16 +21,16 @@ const prismaClientSingle = () => {
     query: {
       $allModels: {
         async $allOperations({ operation, model, args, query }) {
-          const start = performance.now();
+          // const start = performance.now();
           const result = await query(args);
-          const end = performance.now();
-          const time = end - start;
-          console.log(
-            util.inspect(
-              { model, operation, time, args },
-              { showHidden: false, depth: null, colors: true }
-            )
-          );
+          // const end = performance.now();
+          // const time = end - start;
+          // console.log(
+          //   util.inspect(
+          //     { model, operation, time, args },
+          //     { showHidden: false, depth: null, colors: true }
+          //   )
+          // );
 
           if (["create", "update", "delete"].includes(operation)) {
             await libsql.sync();

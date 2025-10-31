@@ -12,7 +12,7 @@
     "gen": "prisma generate",
     "push": "prisma db push",
     "migrate": "prisma migrate dev",
-    "turso:migrate": "turso db shell synapse-db < ./prisma/migrations/20251030074813_add_chat_message/migration.sql"
+    "turso:migrate": "turso db shell synapse < ./prisma/migrations/20251030195711_init/migration.sql"
   },
   "dependencies": {
     "@ai-sdk/google": "^2.0.23",

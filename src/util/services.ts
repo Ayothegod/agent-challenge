@@ -1,7 +1,7 @@
 import { google } from "@ai-sdk/google";
 import { GoogleGenAI } from "@google/genai";
-import { MongoDBVector } from "@mastra/mongodb";
 import { PineconeVector } from "@mastra/pinecone";
+import crypto from "crypto";
 
 export const model = google("gemini-2.0-flash");
 
@@ -61,3 +61,6 @@ export type ErrorProps = {
   showStack?: boolean;
 };
 
+export const hashSummary = (summary: string) => {
+  return crypto.createHash("sha256").update(summary).digest("hex");
+};

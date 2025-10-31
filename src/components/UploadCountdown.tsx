@@ -18,7 +18,7 @@ export function UploadCountdown({
   }, []);
 
   return (
-    <div className=" absolute bottom-4 right-4 bg-white shadow p-4 rounded-md w-72">
+    <div className=" absolute top-4 right-4 bg-white shadow p-4 rounded-md w-72">
       <p>Upload (1)</p>
       <div className="bg-neutral-100 p-3 shadow-sm mt-2 ">
         {finished ? (

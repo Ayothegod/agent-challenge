@@ -83,7 +83,7 @@ export const postQueryOptions = (postId: string) =>
     queryFn: () => fetchPost({ data: postId }),
   });
 
-  // import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
+// import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 //   const queryClient = useQueryClient()
 // const mutation = useMutation({
 //   mutationFn: (newPost) =>
@@ -147,3 +147,15 @@ export const postQueryOptions = (postId: string) =>
 //   },
 //   onSettled: () => queryClient.invalidateQueries(['posts']),
 // })
+
+newChunks: [
+  {
+    id: "e8c9c9d0-2763-4b02-9963-c9fb35fc5525",
+    summary:
+      "ADDENDUM N.B* Prospective Corps Members are strongly advised Not to travel at Night i. Persons who studied In Nigeria should bring To camp: Degree HND Certificates Or Statement Of Results, Personal Identity Card from Institution of graduation. Foreign graduates should bring For verification, original copies Of ALL their uploaded credentials And travel documents including International passport. ii. Foreign graduates are To ensure that academic paper(s) In Languages other than English must be translated into English accordingly; both versions must be presented For verification at the camp. iii. Medical/veterinary Doctors, Dentists, Pharmacists, Optometrists, Physiotherapists Nurses And Public",
+    canonicalTitle: "National Youth Service Corps",
+    source: "pdf",
+    fileName: "addendum.pdf",
+    metadata: [Object],
+  },
+];
