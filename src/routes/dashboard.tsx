@@ -11,8 +11,8 @@ import {
   redirect,
   useRouter,
 } from "@tanstack/react-router";
-import { LucideFolderOpen, MessagesSquareIcon, Send } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { LucideFolderOpen, MessagesSquareIcon } from "lucide-react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
@@ -26,7 +26,7 @@ const formatBytes = (bytes: number) => {
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
-  loader: async ({ context }) => {
+  loader: async ({  }) => {
     try {
       const user = await requireAuth();
       if (!user) redirect({ to: "/auth/login" });
@@ -47,7 +47,6 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 const startChat = () => {
-  // uuidv4()
 };
 
 function RouteComponent() {
