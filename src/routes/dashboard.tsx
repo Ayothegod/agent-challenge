@@ -87,18 +87,10 @@ function RouteComponent() {
     setFinished(true);
     setTimeout(() => setCountdown(false), 3000);
 
-    // errors
-    // :
-    // []
-    // indexed
-    // :
-    // 5
-    // skipped
-    // :
-    // 0
-    // status
-    // :
-    // "success"
+    // errors: []
+    // indexed : 5
+    // skipped : 0
+    // status : "success"
   };
 
   const chats = [""];

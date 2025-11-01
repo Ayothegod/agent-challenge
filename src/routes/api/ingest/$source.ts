@@ -1,7 +1,3 @@
-// interface Source {
-//   source: "pdf" | "docx" | "csv"; // "email" | "notion" | "drive"
-// }
-
 import { indexerTool } from "@/mastra/tools/indexer-tool";
 import { UnifiedDoc } from "@/mastra/types";
 import { connectors } from "@/module/ingest/transform";
